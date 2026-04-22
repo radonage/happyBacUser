@@ -11,3 +11,4 @@ export const updateExam = (id, countryId, data) =>
 
 export const deleteExam = (id, countryId) =>
   api.delete(`/exams/${id}?countryId=${countryId}`);
+ 

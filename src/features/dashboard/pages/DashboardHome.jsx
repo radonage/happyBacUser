@@ -1,39 +1,184 @@
-import WizardContainer from "../../../components/wizard/WizardContainer";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useUser } from "../../../context/UserContext";
+import { PlayCircle, TrendingUp, Flame, BookOpen, GraduationCap, Compass } from "lucide-react";
 
-export default function DashboardHome() {
+/* ================= CORE CARD ================= */
+function GlassCard({ icon: Icon, title, desc, value }) {
   return (
-    <div className="min-h-screen relative overflow-hidden text-white">
+    <div className="p-[1px] rounded-2xl bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500">
+      <div className="bg-black/40 backdrop-blur-xl p-5 rounded-2xl border border-white/10 hover:bg-white/5 transition">
+        <Icon className="text-white/80 mb-2" />
+        <h3 className="font-semibold">{title}</h3>
+        {desc && <p className="text-gray-400 text-xs mt-1">{desc}</p>}
+        {value && <p className="text-lg font-bold mt-2">{value}</p>}
+      </div>
+    </div>
+  );
+}
 
+/* ================= USER ================= */
+function UserDashboard() {
+  return (
+    <div className="max-w-5xl mx-auto space-y-6">
+
+      {/* STATS */}
+      <div className="grid grid-cols-3 gap-4">
+        <GlassCard icon={TrendingUp} title="Progression" value="68%" />
+        <GlassCard icon={Flame} title="Streak" value="5 jours" />
+        <GlassCard icon={GraduationCap} title="Objectif" value="Bac mention" />
+      </div>
+
+      {/* QUICK ACTIONS */}
+      <div className="grid grid-cols-2 gap-4">
+        <QuickCard icon={BookOpen} title="Cours" />
+        <QuickCard icon={PlayCircle} title="Exercices" />
+        <QuickCard icon={BookOpen} title="Examens" />
+        <QuickCard icon={Compass} title="Orientation" />
+      </div>
+
+      {/* CONTINUE LEARNING */}
+      <div className="grid grid-cols-2 gap-4">
+        <GlassCard
+          icon={BookOpen}
+          title="Maths - Fonctions"
+          desc="Continue ton dernier cours"
+        />
+        <GlassCard
+          icon={PlayCircle}
+          title="Exercice du jour"
+          desc="Probabilités avancées"
+        />
+      </div>
+
+    </div>
+  );
+}
+
+/* ================= QUICK CARD ================= */
+function QuickCard({ icon: Icon, title }) {
+  return (
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 flex items-center gap-3 hover:bg-white/10 transition cursor-pointer">
+      <Icon className="text-white/70" />
+      <span className="font-medium">{title}</span>
+    </div>
+  );
+}
+
+/* ================= LANDING ================= */
+function LandingContent({ navigate }) {
+  return (
+    <div className="max-w-7xl mx-auto space-y-10 text-center">
+
+      {/* HERO */}
+      <div>
+        <h1 style={{fontSize:"30px"}} className="text-10xl font-extrabold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 text-transparent bg-clip-text">
+          🎓 Happy Bac
+        </h1>
+
+        <p className="text-gray-400 mt-3 max-w-xl mx-auto">
+          La plateforme intelligente qui te guide vers ton bac avec cours, exercices, examens et orientation personnalisée.
+        </p>
+
+        <div className="flex justify-center gap-4 mt-6">
+          <motion.button
+            onClick={() => navigate("/explorer")}
+            whileHover={{ scale: 1.05 }}
+            className="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600 font-semibold shadow-xl"
+          >
+            <PlayCircle className="inline mr-2" />
+            Commencer les cours
+          </motion.button>
+
+          <motion.button
+            onClick={() => navigate("/register")}
+            whileHover={{ scale: 1.05 }}
+            className="px-8 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-xl"
+          >
+            S'inscrire
+          </motion.button>
+        </div>
+      </div>
+
+      {/* FEATURE CARDS (inspiration orientation page) */}
+      <div className="grid grid-cols-3 gap-4">
+
+        <GlassCard
+          icon={BookOpen}
+          title="Cours intelligents"
+          desc="Apprends étape par étape"
+        />
+
+        <GlassCard
+          icon={TrendingUp}
+          title="Suivi IA"
+          desc="Analyse ton niveau"
+        />
+
+        <GlassCard
+          icon={Compass}
+          title="Orientation"
+          desc="Choisis ton avenir"
+        />
+
+      </div>
+
+      {/* BIG CTA BANNER */}
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-500/10 to-emerald-500/10 border border-white/10 backdrop-blur-xl">
+        <h2 className="text-lg font-semibold">
+          🚀 Commence gratuitement et progresse chaque jour
+        </h2>
+
+        <p className="text-gray-400 text-sm mt-1">
+          Plus de 10 000 étudiants utilisent Happy Bac
+        </p>
+      </div>
+
+    </div>
+  );
+}
+
+/* ================= MAIN ================= */
+export default function DashboardHome() {
+  const navigate = useNavigate();
+  const { user } = useUser();
+
+  return (
+    <div style={{marginTop:"35px"}} className="min-h-screen text-white relative overflow-hidden">
+
+      {/* BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-black to-purple-900/20" />
-      <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-emerald-400 rounded-full blur-[160px] opacity-30 animate-pulse" />
-      <div className="absolute bottom-[-150px] right-[-150px] w-[450px] h-[450px] bg-purple-600 rounded-full blur-[180px] opacity-30 animate-pulse" />
-      <div className="absolute top-[40%] left-[60%] w-[300px] h-[300px] bg-pink-500 rounded-full blur-[200px] opacity-20" />
+      <div className="absolute w-[450px] h-[450px] bg-emerald-400 blur-[180px] opacity-20 top-[-120px] left-[-120px]" />
+      <div className="absolute w-[450px] h-[450px] bg-purple-600 blur-[200px] opacity-20 bottom-[-120px] right-[-120px]" />
 
-      <div className="relative max-w-6xl mx-auto p-6">
+      {/* CONTENT */}
+      <div className="relative w-full px-6">
 
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 text-transparent bg-clip-text">
+        {/* HEADER */}
+        <div className="text-center mb-10">
+          <h1 className="text-7xl font-extrabold bg-gradient-to-r from-emerald-300 to-purple-400 text-transparent bg-clip-text">
             🎓 Happy Bac
-            <br />
           </h1>
 
-          <p className="text-gray-300 mt-4 text-lg max-w-1xl mx-auto">
-            Tout ce qu’il te faut pour réussir, y compris les examens nationaux avec leurs corrections en vidéo.
+          <p className="text-gray-400 text-sm mt-2">
+            Plateforme intelligente de réussite scolaire
           </p>
-
-          <div className="mt-8">
-            <button className="px-8 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-purple-600 hover:scale-105 transition font-semibold shadow-xl">
-              Commencez l'apprentissage
-            </button>
-          </div>
         </div>
 
-        {/* 🎯 WIZARD */}
-        <div className="relative rounded-3xl p-[1px] bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500 shadow-2xl">
-          <div className="bg-black/60 backdrop-blur-2xl rounded-3xl p-8">
-            <WizardContainer />
-          </div>
+        {/* CTA PRIMARY */}
+        <div className="flex justify-center mb-10">
+          <motion.button
+            onClick={() => navigate(user ? "/explorer" : "/register")}
+            whileHover={{ scale: 1.05 }}
+            className="px-10 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600 shadow-xl flex items-center gap-2"
+          >
+            <PlayCircle />
+            {user ? "Continuer" : "Commencer gratuitement"}
+          </motion.button>
         </div>
+
+        {/* DYNAMIC */}
+        {user ? <UserDashboard /> : <LandingContent navigate={navigate} />}
 
       </div>
     </div>
