@@ -102,6 +102,7 @@ const countryFlags = {
 };
 
 export default function StepCountry({ value, onSelect }) {
+
   const [countries, setCountries] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -111,7 +112,6 @@ export default function StepCountry({ value, onSelect }) {
       .catch(console.error);
   }, []);
 
-  // ⚡ memo pour éviter recalcul inutile
   const enrichedCountries = useMemo(() => {
     return countries.map((c) => ({
       ...c,
@@ -127,19 +127,14 @@ export default function StepCountry({ value, onSelect }) {
 
   return (
     <div className="space-y-6 text-white">
-
-      {/* TITLE */}
       <div>
         <h2 className="text-xl font-bold bg-gradient-to-r from-emerald-300 to-purple-400 text-transparent bg-clip-text">
           Choisissez votre pays
         </h2>
       </div>
-
-      {/* SEARCH */}
       <div className="flex items-center gap-3 px-4 py-3 rounded-2xl 
         bg-white/5 border border-white/10 backdrop-blur-xl">
         <Search size={18} className="text-white/50" />
-
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -147,14 +142,12 @@ export default function StepCountry({ value, onSelect }) {
           className="bg-transparent outline-none w-full text-white placeholder-white/30"
         />
       </div>
-
-      {/* SCROLL AREA WOW */}
       <div
         className="grid grid-cols-2 md:grid-cols-3 gap-4 pr-2 custom-scroll"
         style={{
           maxHeight: "420px",
           overflowY: "auto",
-          WebkitOverflowScrolling: "touch" // 🔥 iOS inertial scroll
+          WebkitOverflowScrolling: "touch" 
         }}
       >
         {filteredCountries.map((c, index) => {
@@ -163,7 +156,6 @@ export default function StepCountry({ value, onSelect }) {
             c.code !== "xx"
               ? `https://flagcdn.com/w80/${c.code}.png`
               : null;
-
           return (
             <motion.div
               key={c.id}
@@ -182,16 +174,12 @@ export default function StepCountry({ value, onSelect }) {
                   : "bg-white/5 border-white/10 hover:bg-white/10"}
               `}
             >
-              {/* glow */}
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-purple-500/10 to-pink-500/10 opacity-0 hover:opacity-100 transition" />
-
-              {/* check */}
               {selected && (
                 <div className="absolute top-3 right-3">
                   <Check size={16} className="text-emerald-400" />
                 </div>
               )}
-
               <div className="relative flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 bg-black/20 flex items-center justify-center">
                   {flagUrl ? (
@@ -207,7 +195,6 @@ export default function StepCountry({ value, onSelect }) {
                     <span className="text-xs text-white/40">🌍</span>
                   )}
                 </div>
-
                 <div>
                   <p className="font-medium">{c.name}</p>
                   <p className="text-xs text-white/40">

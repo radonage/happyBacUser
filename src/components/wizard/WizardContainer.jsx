@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Check, ArrowLeft } from "lucide-react";
+
+import { useUser } from "../../context/UserContext";
 
 import StepCountry from "./steps/StepCountry";
 import StepFiliere from "./steps/StepFiliere";
@@ -12,6 +14,8 @@ import CourseView from "../../features/dashboard/pages/CourseView";
 const steps = ["Pays", "filiere", "niveau", "matière", "cours"];
 
 export default function WizardContainer() {
+  const { user } = useUser();
+
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -22,13 +26,46 @@ export default function WizardContainer() {
     subject: null,
   });
 
+  /* =========================
+     🔥 SAFE AUTO SYNC USER
+  ========================= */
+useEffect(() => {
+  if (!user) return;
+
+  const newSelection = {
+    country: user.countryId ? { id: user.countryId } : null,
+    filiere: user.filiereId ? { id: user.filiereId } : null,
+    level: user.levelId ? { id: user.levelId } : null,
+    subject: null,
+  };
+
+  setSelection(newSelection);
+
+  // 🔥 LOGIQUE PROPRE : premier step manquant
+  let nextStep = 0;
+
+  if (!user.countryId) {
+    nextStep = 0;
+  } else if (!user.filiereId) {
+    nextStep = 1;
+  } else if (!user.levelId) {
+    nextStep = 2;
+  } else {
+    nextStep = 3; // subject
+  }
+
+  setStep(nextStep);
+}, [user]);
+
+  /* =========================
+     NAVIGATION
+  ========================= */
   const goNext = () => {
     setDirection(1);
 
     setStep((s) => {
       const next = Math.min(s + 1, steps.length - 1);
 
-      // 🎉 Confetti à la fin
       if (next === steps.length - 1) {
         confetti({
           particleCount: 120,
@@ -46,6 +83,9 @@ export default function WizardContainer() {
     setStep((s) => Math.max(s - 1, 0));
   };
 
+  /* =========================
+     ANIMATIONS
+  ========================= */
   const variants = {
     enter: (dir) => ({
       x: dir > 0 ? 60 : -60,
@@ -66,10 +106,21 @@ export default function WizardContainer() {
 
   const progress = (step / (steps.length - 1)) * 100;
 
+  /* =========================
+     LOADING GUARD (IMPORTANT)
+  ========================= */
+  if (!user) {
+    return (
+      <div className="text-white flex items-center justify-center h-[500px]">
+        Chargement...
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full min-h-[600px]">
 
-      {/* 🔥 PROGRESS BAR */}
+      {/* PROGRESS BAR */}
       <div className="w-full h-1 bg-white/10 rounded-full mb-6 overflow-hidden">
         <motion.div
           className="h-1 bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400"
@@ -78,7 +129,7 @@ export default function WizardContainer() {
         />
       </div>
 
-      {/* 🔥 STEP INDICATORS */}
+      {/* STEPS */}
       <div className="flex justify-center gap-3 mb-6">
         {steps.slice(0, 4).map((s, i) => {
           const status =
@@ -87,16 +138,14 @@ export default function WizardContainer() {
           return (
             <div
               key={s}
-              className={`
-                flex items-center gap-2 px-4 py-1 rounded-full text-xs transition
+              className={`flex items-center gap-2 px-4 py-1 rounded-full text-xs transition
                 ${
                   status === "active"
                     ? "bg-white text-black"
                     : status === "done"
                     ? "bg-emerald-500 text-black"
                     : "bg-white/10 text-white/40"
-                }
-              `}
+                }`}
             >
               {status === "done" && <Check size={14} />}
               <span className="capitalize">{s}</span>
@@ -105,7 +154,7 @@ export default function WizardContainer() {
         })}
       </div>
 
-      {/* 🔥 BACK BUTTON */}
+      {/* BACK */}
       {step > 0 && step < 4 && (
         <button
           onClick={goBack}
@@ -116,7 +165,7 @@ export default function WizardContainer() {
         </button>
       )}
 
-      {/* 🌟 SWIPER AREA */}
+      {/* CONTENT */}
       <div className="relative min-h-[500px] overflow-hidden">
 
         <AnimatePresence mode="wait" custom={direction}>
@@ -160,6 +209,7 @@ export default function WizardContainer() {
             >
               <StepFiliere
                 countryId={selection.country?.id}
+                value={selection.filiere}
                 onSelect={(f) => {
                   setSelection((p) => ({ ...p, filiere: f }));
                   goNext();
@@ -182,6 +232,7 @@ export default function WizardContainer() {
               <StepLevel
                 countryId={selection.country?.id}
                 filiereId={selection.filiere?.id}
+                value={selection.level}
                 onSelect={(l) => {
                   setSelection((p) => ({ ...p, level: l }));
                   goNext();
@@ -223,7 +274,7 @@ export default function WizardContainer() {
             >
               <CourseView
                 subjectId={selection.subject.id}
-                countryId={selection.country.id}
+                countryId={selection.country?.id}
               />
             </motion.div>
           )}

@@ -19,7 +19,6 @@ export function UserProvider({ children }) {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // 🔁 Sync user -> localStorage
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
@@ -28,7 +27,6 @@ export function UserProvider({ children }) {
     }
   }, [user]);
 
-  // 🔁 Sync country -> localStorage
   useEffect(() => {
     if (selectedCountry) {
       localStorage.setItem("selectedCountry", JSON.stringify(selectedCountry));

@@ -42,15 +42,6 @@ export default function Register() {
     const passwordMatch = password === confirm && confirm.length > 0;
     const canPasswordNext = passwordStrong && passwordMatch;
 
-    useEffect(() => {
-        if (step !== 2) {
-            setForm((f) => ({
-                ...f,
-                password: "",
-                confirmPassword: "",
-            }));
-        }
-    }, [step]);
 
     useEffect(() => {
         const load = async () => {
@@ -170,13 +161,8 @@ export default function Register() {
                 <p className="text-center text-white/50 mt-2">
                     rejoignez les élites des professeurs
                 </p>
-
-                {/* STEPS */}
                 <div className="mt-6">
-
                     <AnimatePresence mode="wait">
-
-                        {/* STEP 1 */}
                         {step === 1 && (
                             <motion.div className="space-y-4">
                                 <input
