@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function Register() {
     const { setUser } = useUser();
     const navigate = useNavigate();
-
+const [passwordTouched, setPasswordTouched] = useState(false);
     const [step, setStep] = useState(1);
     const [search, setSearch] = useState("");
 
@@ -40,6 +40,17 @@ export default function Register() {
     const passwordMatch = password === confirm && confirm.length > 0;
 
     const canPasswordNext = passwordStrong && passwordMatch;
+
+    useEffect(() => {
+    if (step !== 2) {
+        setForm((f) => ({
+            ...f,
+            password: "",
+            confirmPassword: "",
+        }));
+    }
+}, [step]);
+
     /* 🌍 COUNTRIES (KEEPED) */
     useEffect(() => {
         const load = async () => {
@@ -222,7 +233,7 @@ export default function Register() {
     <input
       type="password"
       className={input + " bg-black/40"}
-      placeholder="Password"
+      placeholder="Mot de passe"
       onChange={(e) =>
         setForm({ ...form, password: e.target.value })
       }
@@ -256,7 +267,7 @@ export default function Register() {
     <input
       type="password"
       className={input + " bg-black/40"}
-      placeholder="Confirm password"
+      placeholder="Confirmez votre mot de passe"
       onChange={(e) =>
         setForm({ ...form, confirmPassword: e.target.value })
       }
