@@ -28,38 +28,38 @@ export default function Navbar() {
      🌍 SAFE IP DETECTION FIXED
   ========================= */
   useEffect(() => {
-  const detectCountryFromIP = async () => {
-    if (selectedCountry) return;
+    const detectCountryFromIP = async () => {
+      if (selectedCountry) return;
 
-    try {
-      const res = await fetch("https://api.country.is/");
-      const data = await res.json();
+      try {
+        const res = await fetch("https://api.country.is/");
+        const data = await res.json();
 
-      const countryCode = data?.country;
+        const countryCode = data?.country;
 
-      if (!countryCode) return;
+        if (!countryCode) return;
 
-      const country = countries.find(
-        (c) =>
-          c.code?.toLowerCase?.() === countryCode.toLowerCase()
-      );
-
-      if (country) {
-        setSelectedCountry(country);
-        localStorage.setItem(
-          "selectedCountry",
-          JSON.stringify(country)
+        const country = countries.find(
+          (c) =>
+            c.code?.toLowerCase?.() === countryCode.toLowerCase()
         );
-      } else {
-        console.log("Country not found in list:", countryCode);
-      }
-    } catch (err) {
-      console.log("IP detection failed:", err);
-    }
-  };
 
-  detectCountryFromIP();
-}, [selectedCountry, setSelectedCountry]);
+        if (country) {
+          setSelectedCountry(country);
+          localStorage.setItem(
+            "selectedCountry",
+            JSON.stringify(country)
+          );
+        } else {
+          console.log("Country not found in list:", countryCode);
+        }
+      } catch (err) {
+        console.log("IP detection failed:", err);
+      }
+    };
+
+    detectCountryFromIP();
+  }, [selectedCountry, setSelectedCountry]);
 
   /* =========================
      LOCAL STORAGE SYNC
@@ -175,10 +175,15 @@ export default function Navbar() {
 
         {user && (
           <>
-            <div className="hidden md:block text-xs text-white/60">
-              👋 {user.name}
-            </div>
+            <div className="hidden md:flex flex-col leading-tight">
+              <span className="text-xs text-white/50">
+                Bienvenue
+              </span>
+              <span className="text-sm font-semibold bg-gradient-to-r from-purple-300 via-cyan-300 to-pink-300 bg-clip-text text-transparent">
+                {user?.firstName} {user?.lastName}
+              </span>
 
+            </div>
             <motion.div
               whileHover={{ scale: 1.1, rotate: 5 }}
               className="w-9 h-9 rounded-full

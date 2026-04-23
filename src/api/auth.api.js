@@ -3,6 +3,7 @@ import api from "./axios";
 // REGISTER
 export const register = async (data) => {
   const res = await api.post("/auth/register", data);
+  console.log(data)
   return res.data;
 };
 

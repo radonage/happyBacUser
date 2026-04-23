@@ -18,6 +18,8 @@ export default function Register() {
     const [levels, setLevels] = useState([]);
 
     const [form, setForm] = useState({
+        firstName: "",
+        lastName: "",
         email: "",
         phone: "",
         password: "",
@@ -38,7 +40,6 @@ export default function Register() {
 
     const passwordStrong = Object.values(rules).every(Boolean);
     const passwordMatch = password === confirm && confirm.length > 0;
-
     const canPasswordNext = passwordStrong && passwordMatch;
 
     useEffect(() => {
@@ -51,7 +52,6 @@ export default function Register() {
         }
     }, [step]);
 
-    /* 🌍 COUNTRIES (KEEPED) */
     useEffect(() => {
         const load = async () => {
             const res = await fetch("https://happybacbacendfinal.fly.dev/api/countries");
@@ -60,6 +60,7 @@ export default function Register() {
             const rest = await fetch(
                 "https://restcountries.com/v3.1/all?fields=name,cca2,idd,flags"
             );
+
             const restData = await rest.json();
 
             const enriched = backend.map((c) => {
@@ -83,21 +84,16 @@ export default function Register() {
         load();
     }, []);
 
-    /* 📚 FILIERES */
     useEffect(() => {
         if (!form.country?.id) return;
-
         fetch(
             `https://happybacbacendfinal.fly.dev/api/filieres?countryId=${form.country.id}`
         )
             .then((r) => r.json())
             .then(setFilieres);
     }, [form.country]);
-
-    /* 🎓 LEVELS */
     useEffect(() => {
         if (!form.country?.id || !form.filiereId) return;
-
         fetch(
             `https://happybacbacendfinal.fly.dev/api/levels/filter?countryId=${form.country.id}&filiereId=${form.filiereId}`
         )
@@ -116,19 +112,26 @@ export default function Register() {
 
     const submit = async () => {
         try {
-            await register({
+            const payload = {
+                firstName: form.firstName,
+                lastName: form.lastName,
                 email: form.email,
                 phone: form.phone,
                 password: form.password,
                 filiereId: form.filiereId,
                 levelId: form.levelId,
                 countryId: form.country?.id,
-            });
+            };
+
+            console.log("📤 DATA SENT TO BACKEND:", payload);
+
+            await register(payload);
 
             toast.success("Inscription réussie 🎉");
             setUser(form);
             navigate("/");
-        } catch {
+        } catch (err) {
+            console.error("❌ ERROR:", err);
             toast.error("Erreur lors de l'inscription");
         }
     };
@@ -136,7 +139,9 @@ export default function Register() {
     /* VALIDATION PROPRE */
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
     const isPhoneValid = form.phone.replace(/\D/g, "").length >= 5;
-    const canGoNext = isEmailValid && isPhoneValid;
+    const isNameValid = form.firstName.trim() !== "" && form.lastName.trim() !== "";
+    const canGoNext = isEmailValid && isPhoneValid && isNameValid;
+
 
     const input =
         "w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 outline-none backdrop-blur-xl transition appearance-none";;
@@ -174,7 +179,23 @@ export default function Register() {
                         {/* STEP 1 */}
                         {step === 1 && (
                             <motion.div className="space-y-4">
+                                <input
+                                    value={form.firstName}
+                                    className={input + " bg-black/40"}
+                                    placeholder="Prénom"
+                                    onChange={(e) =>
+                                        setForm({ ...form, firstName: e.target.value })
+                                    }
+                                />
 
+                                <input
+                                    value={form.lastName}
+                                    className={input + " bg-black/40"}
+                                    placeholder="Nom"
+                                    onChange={(e) =>
+                                        setForm({ ...form, lastName: e.target.value })
+                                    }
+                                />
                                 <input
                                     className={input + " bg-black/40"}
                                     placeholder="Email"
@@ -223,64 +244,49 @@ export default function Register() {
                                 <Nav next={next} canGoNext={canGoNext} />
                             </motion.div>
                         )}
-
-                        {/* STEP 2 */}
-                        {/* STEP 2 */}
                         {step === 2 && (
                             <motion.div className="space-y-4">
-
-                                {/* PASSWORD */}
                                 <input
                                     type="password"
+                                    value={form.password}
                                     className={input + " bg-black/40"}
                                     placeholder="Mot de passe"
                                     onChange={(e) =>
-                                        setForm({ ...form, password: e.target.value })
+                                        setForm((f) => ({ ...f, password: e.target.value }))
                                     }
                                 />
-
-                                {/* SAAS PASSWORD STRENGTH UI */}
                                 <div className="space-y-1 text-xs mt-2">
-
                                     <div className={`flex justify-between ${rules.length ? "text-green-400" : "text-white/40"}`}>
                                         <span>8 caractères minimum</span>
                                         <span>{rules.length ? "✔" : "○"}</span>
                                     </div>
-
                                     <div className={`flex justify-between ${rules.upper ? "text-green-400" : "text-white/40"}`}>
                                         <span>1 majuscule</span>
                                         <span>{rules.upper ? "✔" : "○"}</span>
                                     </div>
-
                                     <div className={`flex justify-between ${rules.lower ? "text-green-400" : "text-white/40"}`}>
                                         <span>1 minuscule</span>
                                         <span>{rules.lower ? "✔" : "○"}</span>
                                     </div>
-
                                     <div className={`flex justify-between ${rules.number ? "text-green-400" : "text-white/40"}`}>
                                         <span>1 chiffre</span>
                                         <span>{rules.number ? "✔" : "○"}</span>
                                     </div>
                                 </div>
-
-                                {/* CONFIRM PASSWORD */}
                                 <input
                                     type="password"
+                                    value={form.confirmPassword}
                                     className={input + " bg-black/40"}
                                     placeholder="Confirmez votre mot de passe"
                                     onChange={(e) =>
-                                        setForm({ ...form, confirmPassword: e.target.value })
+                                        setForm((f) => ({ ...f, confirmPassword: e.target.value }))
                                     }
                                 />
-
-                                {/* MATCH INDICATOR */}
                                 {form.confirmPassword.length > 0 && (
                                     <p className={`text-xs ${passwordMatch ? "text-green-400" : "text-red-400"}`}>
                                         {passwordMatch ? "✔ Les mots de passe correspondent" : "✖ Les mots de passe ne correspondent pas"}
                                     </p>
                                 )}
-
-                                {/* SAAS PROGRESS BAR */}
                                 <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full transition-all duration-300 ${passwordStrong ? "bg-green-400" : "bg-purple-500"

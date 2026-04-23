@@ -30,17 +30,18 @@ export default function Login() {
 
       const userData = res.data;
 
+      // 👤 SET USER (auto sync context + localStorage)
       setUser(userData);
 
+      // 🌍 FIND USER COUNTRY
       const userCountry = countries.find(
         (c) => c.id === userData.countryId
       );
 
+      // 🌍 SET COUNTRY (auto sync context + localStorage)
       setSelectedCountry(userCountry || null);
 
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("selectedCountry", JSON.stringify(userCountry));
-
+      // 🚀 NAVIGATE
       navigate("/");
     } catch (err) {
       setError("Email ou mot de passe invalide");
@@ -101,8 +102,6 @@ export default function Login() {
                 ${focus ? "focusGlow" : ""}`}
             />
           </div>
-
-          {/* PASSWORD */}
           <div className="mb-6">
             <label className="text-xs text-white/60">Mot de passe</label>
             <input
@@ -118,8 +117,6 @@ export default function Login() {
                 ${focus ? "focusGlow" : ""}`}
             />
           </div>
-
-          {/* BUTTON */}
           <button
             onClick={handleSubmit}
             disabled={loading}
@@ -131,11 +128,9 @@ export default function Login() {
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
-
           <p className="text-center text-xs text-white/40 mt-6">
             Mot de passe oublié ?
           </p>
-
         </div>
       </div>
     </div>
