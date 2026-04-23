@@ -98,12 +98,18 @@ export default function OrientationPage() {
                 </div>
               ))}
             </div>
+
+            {/* CTA */}
             <button className="mt-5 w-full py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
               Explorer ce parcours
             </button>
-n.div>
+
+          </motion.div>
         ))}
+
       </div>
+
+
     </div>
   );
 }
