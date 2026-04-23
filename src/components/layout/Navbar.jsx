@@ -79,8 +79,7 @@ export default function Navbar() {
 
   const menu = [
     { label: "Accueil", icon: Home, path: "/" },
-    { label: "Explorer", icon: Compass, path: "/explorer" },
-    { label: "Matières", icon: BookOpen, path: "/matiere" },
+    { label: "Matières", icon: BookOpen, path: "/explorer" },
     { label: "Examens", icon: FileText, path: "/exams" },
     { label: "Orientation", icon: Compass, path: "/orientation" },
     { label: "Études", icon: Globe, path: "/etudes" },
