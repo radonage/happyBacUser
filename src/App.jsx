@@ -24,7 +24,6 @@ export default function App() {
     <div className="flex min-h-screen bg-black text-white">
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <div className="p-6">
           <Routes>
             <Route path="/" element={<DashboardHome />} />
             <Route path="/explorer" element={<Explorer />} />
@@ -40,7 +39,6 @@ export default function App() {
             <Route path="/login" element={<Login />} />
           </Routes>
         </div>
-      </div>
     </div>
   );
 }

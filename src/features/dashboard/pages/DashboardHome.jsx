@@ -72,7 +72,7 @@ function LandingContent({ navigate }) {
 
       {/* HERO */}
       <div>
-        <h1 style={{fontSize:"30px"}} className="text-10xl font-extrabold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 text-transparent bg-clip-text">
+        <h1 style={{ fontSize: "30px" }} className="text-10xl font-extrabold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 text-transparent bg-clip-text">
           🎓 Happy Bac
         </h1>
 
@@ -100,40 +100,71 @@ function LandingContent({ navigate }) {
         </div>
       </div>
 
-      {/* FEATURE CARDS (inspiration orientation page) */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <GlassCard
-          icon={BookOpen}
-          title="Cours intelligents"
-          desc="Apprends étape par étape"
-        />
+        {/* Examens */}
+        <div
+          onClick={() => navigate("/exams")}
+          className="relative rounded-2xl overflow-hidden h-60 text-white shadow-lg cursor-pointer flex items-center justify-center text-center hover:scale-[1.02] transition"
+          style={{
+            backgroundImage: "url('/certifications.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
 
-        <GlassCard
-          icon={TrendingUp}
-          title="Suivi IA"
-          desc="Analyse ton niveau"
-        />
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            <BookOpen className="mb-2" />
+            <h3 className="text-xl font-semibold">Examens</h3>
+            <p className="text-sm opacity-90">
+              Sujets corrigés et entraînement Bac
+            </p>
+          </div>
+        </div>
 
-        <GlassCard
-          icon={Compass}
-          title="Orientation"
-          desc="Choisis ton avenir"
-        />
+        <div
+          onClick={() => navigate("/orientation")}
+          className="relative rounded-2xl overflow-hidden h-60 text-white shadow-lg cursor-pointer flex items-center justify-center text-center hover:scale-[1.02] transition"
+          style={{
+            backgroundImage: "url('/data-science.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
+
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            <Compass className="mb-2" />
+            <h3 className="text-xl font-semibold">Orientation</h3>
+            <p className="text-sm opacity-90">
+              Découvre les filières qui te correspondent
+            </p>
+          </div>
+        </div>
+
+        {/* Études */}
+        <div
+          onClick={() => navigate("/etudes")}
+          className="relative rounded-2xl overflow-hidden h-60 text-white shadow-lg cursor-pointer flex items-center justify-center text-center hover:scale-[1.02] transition"
+          style={{
+            backgroundImage: "url('/udemy.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
+
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            <BookOpen className="mb-2" />
+            <h3 className="text-xl font-semibold">Études</h3>
+            <p className="text-sm opacity-90">
+              Études à l'étranger
+            </p>
+          </div>
+        </div>
 
       </div>
-
-      {/* BIG CTA BANNER */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-500/10 to-emerald-500/10 border border-white/10 backdrop-blur-xl">
-        <h2 className="text-lg font-semibold">
-          🚀 Commence gratuitement et progresse chaque jour
-        </h2>
-
-        <p className="text-gray-400 text-sm mt-1">
-          Plus de 10 000 étudiants utilisent Happy Bac
-        </p>
-      </div>
-
     </div>
   );
 }
@@ -144,28 +175,19 @@ export default function DashboardHome() {
   const { user } = useUser();
 
   return (
-    <div style={{marginTop:"35px"}} className="min-h-screen text-white relative overflow-hidden">
-
-      {/* BACKGROUND */}
+    <div className="min-h-screen text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-black to-purple-900/20" />
       <div className="absolute w-[450px] h-[450px] bg-emerald-400 blur-[180px] opacity-20 top-[-120px] left-[-120px]" />
       <div className="absolute w-[450px] h-[450px] bg-purple-600 blur-[200px] opacity-20 bottom-[-120px] right-[-120px]" />
-
-      {/* CONTENT */}
       <div className="relative w-full px-6">
-
-        {/* HEADER */}
         <div className="text-center mb-10">
-          <h1 className="text-7xl font-extrabold bg-gradient-to-r from-emerald-300 to-purple-400 text-transparent bg-clip-text">
+          <h1 style={{ marginTop: "50px" }} className="text-7xl font-extrabold bg-gradient-to-r from-emerald-300 to-purple-400 text-transparent bg-clip-text">
             🎓 Happy Bac
           </h1>
-
           <p className="text-gray-400 text-sm mt-2">
             Plateforme intelligente de réussite scolaire
           </p>
         </div>
-
-        {/* CTA PRIMARY */}
         <div className="flex justify-center mb-10">
           <motion.button
             onClick={() => navigate(user ? "/explorer" : "/register")}
@@ -176,10 +198,7 @@ export default function DashboardHome() {
             {user ? "Continuer" : "Commencer gratuitement"}
           </motion.button>
         </div>
-
-        {/* DYNAMIC */}
         {user ? <UserDashboard /> : <LandingContent navigate={navigate} />}
-
       </div>
     </div>
   );
