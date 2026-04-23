@@ -40,8 +40,6 @@ export default function Explorer() {
         >
           Explorer les matières
         </motion.h1>
-
-        {/* GLASS CONTAINER (SAME SAAS STYLE AS REGISTER) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -49,9 +47,7 @@ export default function Explorer() {
           className="rounded-3xl p-[1px] bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500 shadow-2xl"
         >
           <div className="bg-white/5 backdrop-blur-3xl rounded-3xl p-8 border border-white/10">
-
             <WizardContainer />
-
           </div>
         </motion.div>
 
