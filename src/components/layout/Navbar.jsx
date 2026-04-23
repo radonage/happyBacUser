@@ -59,8 +59,8 @@ export default function Navbar() {
   ];
 
   const authMenu = [
-    { label: "Login", icon: LogIn, path: "/login" },
-    { label: "Register", icon: UserPlus, path: "/register" },
+    { label: "Se connecter", icon: LogIn, path: "/login" },
+    { label: "S'inscrire", icon: UserPlus, path: "/register" },
   ];
 
   const countryName = selectedCountry?.name ?? "Choisissez un pays";
