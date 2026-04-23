@@ -128,7 +128,7 @@ export default function Register() {
     const canGoNext = isEmailValid && isPhoneValid;
 
     const input =
-        "w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 outline-none backdrop-blur-xl transition";
+            "w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 outline-none backdrop-blur-xl transition appearance-none";;
 
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden text-white px-4">
@@ -165,7 +165,7 @@ export default function Register() {
                             <motion.div className="space-y-4">
 
                                 <input
-                                    className={input}
+                                    className={input + " bg-black/40"}
                                     placeholder="Email"
                                     onChange={(e) =>
                                         setForm({ ...form, email: e.target.value })
@@ -173,7 +173,7 @@ export default function Register() {
                                 />
 
                                 <input
-                                    className={input}
+                                    className={input + " bg-black/40"}
                                     placeholder="Cherchez votre pays"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
@@ -201,7 +201,7 @@ export default function Register() {
                                     </div>
 
                                     <input
-                                        className={input}
+                                        className={input + " bg-black/40"}
                                         placeholder="Numéro de téléphone"
                                         onChange={(e) =>
                                             setForm({ ...form, phone: e.target.value })
@@ -221,7 +221,7 @@ export default function Register() {
     {/* PASSWORD */}
     <input
       type="password"
-      className={input}
+      className={input + " bg-black/40"}
       placeholder="Password"
       onChange={(e) =>
         setForm({ ...form, password: e.target.value })
@@ -255,7 +255,7 @@ export default function Register() {
     {/* CONFIRM PASSWORD */}
     <input
       type="password"
-      className={input}
+      className={input + " bg-black/40"}
       placeholder="Confirm password"
       onChange={(e) =>
         setForm({ ...form, confirmPassword: e.target.value })
@@ -294,7 +294,7 @@ export default function Register() {
                             <motion.div className="space-y-4">
 
                                 <select
-                                    className={input}
+                                    className={input + " bg-black/40"}
                                     onChange={(e) =>
                                         setForm({ ...form, filiereId: e.target.value })
                                     }
@@ -306,7 +306,7 @@ export default function Register() {
                                 </select>
 
                                 <select
-                                    className={input}
+                                    className={input + " bg-black/40"}
                                     onChange={(e) =>
                                         setForm({ ...form, levelId: e.target.value })
                                     }
