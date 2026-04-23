@@ -90,13 +90,7 @@ function LandingContent({ navigate }) {
             Commencer les cours
           </motion.button>
 
-          <motion.button
-            onClick={() => navigate("/register")}
-            whileHover={{ scale: 1.05 }}
-            className="px-8 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-xl"
-          >
-            S'inscrire
-          </motion.button>
+         
         </div>
       </div>
 
