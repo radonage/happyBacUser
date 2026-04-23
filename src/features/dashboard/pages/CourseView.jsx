@@ -31,9 +31,7 @@ export default function CourseView({
     setSelectedCourse(course);
     setIsModalOpen(true);
     setTab("video");
-
     setActivePdf(course.fileUrls?.[0] || null);
-
     onSelectCourse?.(course);
   };
 
@@ -91,14 +89,13 @@ export default function CourseView({
           ))}
       </div>
 
-      {/* EMPTY */}
       {!loading && courses.length === 0 && (
         <div className="text-center py-16 text-white/40">
           Aucun cours disponible
         </div>
       )}
 
-      {/* MODAL PREMIUM */}
+      {/* MODAL PREMIUM CINEMA */}
       <AnimatePresence>
         {isModalOpen && selectedCourse && (
           <motion.div
@@ -108,13 +105,16 @@ export default function CourseView({
             className="
               fixed inset-0 z-50
               flex items-center justify-center
-              bg-black/70 backdrop-blur-xl
+              bg-black/80 backdrop-blur-2xl
               px-4
             "
             onClick={closeModal}
           >
 
-            {/* CARD */}
+            {/* BACKDROP GLOW CINEMA */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(34,197,94,0.15),transparent_60%),radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.12),transparent_55%)]" />
+
+            {/* MODAL */}
             <motion.div
               initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -122,21 +122,25 @@ export default function CourseView({
               transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
               className="
-                w-full max-w-5xl
-                max-h-[90vh]
+                relative w-full max-w-6xl
+                max-h-[92vh]
                 flex flex-col
                 rounded-3xl
-                border border-white/10
-                bg-gradient-to-b from-[#0b0b0b] to-[#141414]
-                shadow-2xl
                 overflow-hidden
+                border border-white/10
+                bg-[#0a0a0a]/80
+                backdrop-blur-2xl
+                shadow-[0_0_120px_rgba(0,0,0,0.9)]
               "
             >
 
+              {/* VIGNETTE */}
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+
               {/* HEADER */}
-              <div className="flex items-center justify-between p-5 border-b border-white/10">
+              <div className="relative flex items-center justify-between p-5 border-b border-white/10">
                 <div>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold bg-gradient-to-r from-emerald-300 to-purple-400 text-transparent bg-clip-text">
                     {selectedCourse.title}
                   </h2>
                   <p className="text-white/40 text-sm">
@@ -146,20 +150,21 @@ export default function CourseView({
 
                 <button
                   onClick={closeModal}
-                  className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition"
+                  className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition backdrop-blur-xl"
                 >
                   ✕
                 </button>
               </div>
 
               {/* TABS */}
-              <div className="flex gap-2 px-5 py-3 border-b border-white/10">
+              <div className="relative flex gap-2 px-5 py-3 border-b border-white/10">
                 {["video", "pdf", "info"].map((t) => (
                   <button
                     key={t}
                     onClick={() => setTab(t)}
                     className={`
                       px-4 py-1.5 rounded-full text-sm transition
+                      border border-white/10 backdrop-blur-xl
                       ${tab === t
                         ? "bg-white text-black"
                         : "bg-white/5 text-white/60 hover:bg-white/10"
@@ -176,26 +181,29 @@ export default function CourseView({
 
                 {/* VIDEO */}
                 {tab === "video" && (
-                  <div className="rounded-2xl overflow-hidden border border-white/10">
+                  <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+
                     {selectedCourse.videoUrl ? (
                       <video
                         src={selectedCourse.videoUrl}
                         controls
-                        className="w-full bg-black"
+                        className="w-full aspect-video object-cover"
                       />
                     ) : (
-                      <div className="p-6 text-white/50">
+                      <div className="p-10 text-white/50 text-center">
                         Aucune vidéo disponible
                       </div>
                     )}
+
                   </div>
                 )}
 
                 {/* PDF */}
                 {tab === "pdf" && (
-                  <div className="flex gap-4 h-[65vh]">
+                  <div className="flex gap-4 h-[70vh]">
 
-                    {/* LIST */}
                     <div className="w-1/3 space-y-2 overflow-y-auto pr-2">
                       {selectedCourse.fileUrls?.map((url, i) => (
                         <div
@@ -203,19 +211,19 @@ export default function CourseView({
                           onClick={() => setActivePdf(url)}
                           className={`
                             p-3 rounded-xl text-sm cursor-pointer transition
+                            border border-white/10
                             ${activePdf === url
-                              ? "bg-white text-black"
+                              ? "bg-gradient-to-r from-emerald-500 to-purple-500 text-black font-semibold"
                               : "bg-white/5 hover:bg-white/10 text-white"
                             }
                           `}
                         >
-                          📄 Document {i + 1}
+                          📘 Document {i + 1}
                         </div>
                       ))}
                     </div>
 
-                    {/* VIEWER */}
-                    <div className="flex-1 rounded-2xl overflow-hidden border border-white/10 bg-black/40">
+                    <div className="flex-1 rounded-2xl overflow-hidden border border-white/10 bg-black shadow-inner">
                       {activePdf ? (
                         <iframe
                           src={`https://docs.google.com/gview?url=${encodeURIComponent(
@@ -224,7 +232,7 @@ export default function CourseView({
                           className="w-full h-full"
                         />
                       ) : (
-                        <div className="p-6 text-white/50">
+                        <div className="p-6 text-white/40">
                           Sélectionne un document
                         </div>
                       )}
@@ -241,7 +249,6 @@ export default function CourseView({
                 )}
 
               </div>
-
             </motion.div>
           </motion.div>
         )}

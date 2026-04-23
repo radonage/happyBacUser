@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function Register() {
     const { setUser } = useUser();
     const navigate = useNavigate();
-const [passwordTouched, setPasswordTouched] = useState(false);
+    const [passwordTouched, setPasswordTouched] = useState(false);
     const [step, setStep] = useState(1);
     const [search, setSearch] = useState("");
 
@@ -42,14 +42,14 @@ const [passwordTouched, setPasswordTouched] = useState(false);
     const canPasswordNext = passwordStrong && passwordMatch;
 
     useEffect(() => {
-    if (step !== 2) {
-        setForm((f) => ({
-            ...f,
-            password: "",
-            confirmPassword: "",
-        }));
-    }
-}, [step]);
+        if (step !== 2) {
+            setForm((f) => ({
+                ...f,
+                password: "",
+                confirmPassword: "",
+            }));
+        }
+    }, [step]);
 
     /* 🌍 COUNTRIES (KEEPED) */
     useEffect(() => {
@@ -139,7 +139,7 @@ const [passwordTouched, setPasswordTouched] = useState(false);
     const canGoNext = isEmailValid && isPhoneValid;
 
     const input =
-            "w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 outline-none backdrop-blur-xl transition appearance-none";;
+        "w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 outline-none backdrop-blur-xl transition appearance-none";;
 
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden text-white px-4">
@@ -226,80 +226,79 @@ const [passwordTouched, setPasswordTouched] = useState(false);
 
                         {/* STEP 2 */}
                         {/* STEP 2 */}
-{step === 2 && (
-  <motion.div className="space-y-4">
+                        {step === 2 && (
+                            <motion.div className="space-y-4">
 
-    {/* PASSWORD */}
-    <input
-      type="password"
-      className={input + " bg-black/40"}
-      placeholder="Mot de passe"
-      onChange={(e) =>
-        setForm({ ...form, password: e.target.value })
-      }
-    />
+                                {/* PASSWORD */}
+                                <input
+                                    type="password"
+                                    className={input + " bg-black/40"}
+                                    placeholder="Mot de passe"
+                                    onChange={(e) =>
+                                        setForm({ ...form, password: e.target.value })
+                                    }
+                                />
 
-    {/* SAAS PASSWORD STRENGTH UI */}
-    <div className="space-y-1 text-xs mt-2">
+                                {/* SAAS PASSWORD STRENGTH UI */}
+                                <div className="space-y-1 text-xs mt-2">
 
-      <div className={`flex justify-between ${rules.length ? "text-green-400" : "text-white/40"}`}>
-        <span>8 caractères minimum</span>
-        <span>{rules.length ? "✔" : "○"}</span>
-      </div>
+                                    <div className={`flex justify-between ${rules.length ? "text-green-400" : "text-white/40"}`}>
+                                        <span>8 caractères minimum</span>
+                                        <span>{rules.length ? "✔" : "○"}</span>
+                                    </div>
 
-      <div className={`flex justify-between ${rules.upper ? "text-green-400" : "text-white/40"}`}>
-        <span>1 majuscule</span>
-        <span>{rules.upper ? "✔" : "○"}</span>
-      </div>
+                                    <div className={`flex justify-between ${rules.upper ? "text-green-400" : "text-white/40"}`}>
+                                        <span>1 majuscule</span>
+                                        <span>{rules.upper ? "✔" : "○"}</span>
+                                    </div>
 
-      <div className={`flex justify-between ${rules.lower ? "text-green-400" : "text-white/40"}`}>
-        <span>1 minuscule</span>
-        <span>{rules.lower ? "✔" : "○"}</span>
-      </div>
+                                    <div className={`flex justify-between ${rules.lower ? "text-green-400" : "text-white/40"}`}>
+                                        <span>1 minuscule</span>
+                                        <span>{rules.lower ? "✔" : "○"}</span>
+                                    </div>
 
-      <div className={`flex justify-between ${rules.number ? "text-green-400" : "text-white/40"}`}>
-        <span>1 chiffre</span>
-        <span>{rules.number ? "✔" : "○"}</span>
-      </div>
-    </div>
+                                    <div className={`flex justify-between ${rules.number ? "text-green-400" : "text-white/40"}`}>
+                                        <span>1 chiffre</span>
+                                        <span>{rules.number ? "✔" : "○"}</span>
+                                    </div>
+                                </div>
 
-    {/* CONFIRM PASSWORD */}
-    <input
-      type="password"
-      className={input + " bg-black/40"}
-      placeholder="Confirmez votre mot de passe"
-      onChange={(e) =>
-        setForm({ ...form, confirmPassword: e.target.value })
-      }
-    />
+                                {/* CONFIRM PASSWORD */}
+                                <input
+                                    type="password"
+                                    className={input + " bg-black/40"}
+                                    placeholder="Confirmez votre mot de passe"
+                                    onChange={(e) =>
+                                        setForm({ ...form, confirmPassword: e.target.value })
+                                    }
+                                />
 
-    {/* MATCH INDICATOR */}
-    {form.confirmPassword.length > 0 && (
-      <p className={`text-xs ${passwordMatch ? "text-green-400" : "text-red-400"}`}>
-        {passwordMatch ? "✔ Les mots de passe correspondent" : "✖ Les mots de passe ne correspondent pas"}
-      </p>
-    )}
+                                {/* MATCH INDICATOR */}
+                                {form.confirmPassword.length > 0 && (
+                                    <p className={`text-xs ${passwordMatch ? "text-green-400" : "text-red-400"}`}>
+                                        {passwordMatch ? "✔ Les mots de passe correspondent" : "✖ Les mots de passe ne correspondent pas"}
+                                    </p>
+                                )}
 
-    {/* SAAS PROGRESS BAR */}
-    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-      <div
-        className={`h-full transition-all duration-300 ${
-          passwordStrong ? "bg-green-400" : "bg-purple-500"
-        }`}
-        style={{
-          width: `${Object.values(rules).filter(Boolean).length * 25}%`,
-        }}
-      />
-    </div>
+                                {/* SAAS PROGRESS BAR */}
+                                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                                    <div
+                                        className={`h-full transition-all duration-300 ${passwordStrong ? "bg-green-400" : "bg-purple-500"
+                                            }`}
+                                        style={{
+                                            width: `${Object.values(rules).filter(Boolean).length * 25}%`,
+                                        }}
+                                    />
+                                </div>
 
-    {/* NAV */}
-    <Nav
-      next={next}
-      prev={prev}
-      canGoNext={canPasswordNext}
-    />
-  </motion.div>
-)}
+                                {/* NAV */}
+                                <Nav
+                                    next={next}
+                                    prev={prev}
+                                    canGoNext={canPasswordNext}
+                                />
+                            </motion.div>
+                        )}
                         {/* STEP 3 */}
                         {step === 3 && (
                             <motion.div className="space-y-4">
@@ -346,11 +345,11 @@ function Nav({ next, prev, submit, canGoNext = true }) {
 
             {prev && (
                 <button
-  onClick={prev}
-  className="w-1/2 p-3 rounded-xl bg-white/10"
->
-  Retour
-</button>
+                    onClick={prev}
+                    className="w-1/2 p-3 rounded-xl bg-white/10"
+                >
+                    Retour
+                </button>
             )}
 
             {submit ? (
