@@ -147,7 +147,7 @@ export default function StepCountry({ value, onSelect }) {
         style={{
           maxHeight: "420px",
           overflowY: "auto",
-          WebkitOverflowScrolling: "touch" 
+          WebkitOverflowScrolling: "touch"
         }}
       >
         {filteredCountries.map((c, index) => {
