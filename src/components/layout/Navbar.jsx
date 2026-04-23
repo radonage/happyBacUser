@@ -133,8 +133,8 @@ export default function Navbar() {
         {!user && (
           <div className="flex items-center gap-2">
             {[
-              { label: "Login", icon: LogIn, path: "/login" },
-              { label: "Register", icon: UserPlus, path: "/register" },
+              { label: "Se connecter", icon: LogIn, path: "/login" },
+              { label: "S'inscrire", icon: UserPlus, path: "/register" },
             ].map((item) => {
               const Icon = item.icon;
 
