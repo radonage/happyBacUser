@@ -73,7 +73,7 @@ export default function Matiere() {
         className="mb-10"
       >
         <h1 className="text-4xl font-bold">
-          📚 Matières
+          Matières
         </h1>
         <p className="text-white/50 mt-2">
           Explore toutes les matières disponibles pour ton apprentissage

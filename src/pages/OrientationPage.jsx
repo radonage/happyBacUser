@@ -98,38 +98,12 @@ export default function OrientationPage() {
                 </div>
               ))}
             </div>
-
-            {/* CTA */}
             <button className="mt-5 w-full py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
               Explorer ce parcours
             </button>
-
-          </motion.div>
+n.div>
         ))}
-
       </div>
-
-      {/* BOTTOM INSIGHT */}
-      <div className="px-10 pb-10">
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-white/10 backdrop-blur-xl flex items-center justify-between">
-
-          <div>
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <TrendingUp className="text-green-400" />
-              Insight personnalisé
-            </h3>
-            <p className="text-white/50 text-sm mt-1">
-              Les étudiants similaires à toi réussissent mieux en Sciences Maths
-            </p>
-          </div>
-
-          <button className="px-5 py-2 bg-green-500 hover:bg-green-600 rounded-xl">
-            Voir recommandation
-          </button>
-
-        </div>
-      </div>
-
     </div>
   );
 }
