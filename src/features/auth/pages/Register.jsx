@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { register } from "../../../api/auth.api";
 import { useUser } from "../../../context/UserContext";
-import { Search, ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@ export default function Register() {
     levelId: "",
   });
 
-  /* 🌍 COUNTRIES */
+  /* 🌍 COUNTRIES (KEEPED) */
   useEffect(() => {
     const load = async () => {
       const res = await fetch("https://happybacbacendfinal.fly.dev/api/countries");
@@ -91,92 +91,54 @@ export default function Register() {
 
   const submit = async () => {
     try {
-      const payload = {
+      await register({
         email: form.email,
         phone: form.phone,
         password: form.password,
         filiereId: form.filiereId,
         levelId: form.levelId,
         countryId: form.country?.id,
-      };
-
-      await register(payload);
+      });
 
       toast.success("Inscription réussie 🎉");
-
-      setUser(payload);
+      setUser(form);
       navigate("/");
-    } catch (err) {
+    } catch {
       toast.error("Erreur lors de l'inscription");
     }
   };
 
+  /* VALIDATION PROPRE */
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+  const isPhoneValid = form.phone.replace(/\D/g, "").length >= 5;
+  const canGoNext = isEmailValid && isPhoneValid;
+
   const input =
     "w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:ring-2 focus:ring-purple-500 outline-none backdrop-blur-xl transition";
-
-  const progress = (step / 3) * 100;
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden text-white px-4">
 
-      {/* 🌌 BACKGROUND IMAGE ZOOM */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          initial={{ scale: 1.01 }}
+        <motion.img
+          src="/monimage.avif"
+          initial={{ scale: 1 }}
           animate={{ scale: 1.12 }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear",
-          }}
-          className="absolute inset-0"
-        >
-          <img
-            src="/monimage.avif"
-            className="w-full h-full object-cover opacity-60"
-          />
-        </motion.div>
-
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-black/30 to-cyan-900/30" />
+          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
+          className="w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      {/* 🌟 GLOW ORBS */}
-      <div className="absolute w-[500px] h-[500px] bg-purple-500/20 blur-[160px] rounded-full top-10 left-10" />
-      <div className="absolute w-[400px] h-[400px] bg-cyan-400/20 blur-[160px] rounded-full bottom-10 right-10" />
+      {/* CARD */}
+      <div className="w-full max-w-xl p-8 rounded-3xl relative z-10
+        bg-white/5 backdrop-blur-3xl border border-white/10">
 
-      {/* 💎 CARD */}
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        className="w-full max-w-xl p-8 rounded-3xl relative z-10
-        bg-white/5 backdrop-blur-3xl border border-white/10
-        shadow-[0_0_80px_rgba(0,0,0,0.6)]"
-      >
-
-        {/* GLOW BORDER */}
-        <div className="absolute inset-0 rounded-3xl border border-white/10 shadow-[0_0_60px_rgba(168,85,247,0.15)] animate-pulse pointer-events-none" />
-
-        {/* HEADER */}
-        <h1 className="text-3xl font-bold text-center">
-          Create account
-        </h1>
+        <h1 className="text-3xl font-bold text-center">Crée un compte</h1>
 
         <p className="text-center text-white/50 mt-2">
-          Join the learning experience 🚀
-        </p>
-
-        {/* PROGRESS */}
-        <div className="w-full h-1 bg-white/10 rounded-full mt-6 overflow-hidden">
-          <motion.div
-            className="h-full bg-gradient-to-r from-purple-500 to-cyan-400"
-            animate={{ width: `${progress}%` }}
-          />
-        </div>
-
-        <p className="text-xs text-white/40 mt-2 text-center">
-          Step {step} / 3
+          rejoignez les élites des professeurs
         </p>
 
         {/* STEPS */}
@@ -186,13 +148,8 @@ export default function Register() {
 
             {/* STEP 1 */}
             {step === 1 && (
-              <motion.div
-                key="s1"
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 30 }}
-                className="space-y-4"
-              >
+              <motion.div className="space-y-4">
+
                 <input
                   className={input}
                   placeholder="Email"
@@ -203,7 +160,7 @@ export default function Register() {
 
                 <input
                   className={input}
-                  placeholder="Search country..."
+                  placeholder="Cherchez votre pays"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -212,9 +169,7 @@ export default function Register() {
                   {filtered.map((c) => (
                     <div
                       key={c.id}
-                      onClick={() =>
-                        setForm({ ...form, country: c })
-                      }
+                      onClick={() => setForm({ ...form, country: c })}
                       className="p-3 flex items-center gap-3 hover:bg-white/10 cursor-pointer"
                     >
                       {c.flag && (
@@ -233,26 +188,21 @@ export default function Register() {
 
                   <input
                     className={input}
-                    placeholder="Phone"
+                    placeholder="Numéro de téléphone"
                     onChange={(e) =>
                       setForm({ ...form, phone: e.target.value })
                     }
                   />
                 </div>
 
-                <Nav next={next} />
+                <Nav next={next} canGoNext={canGoNext} />
               </motion.div>
             )}
 
             {/* STEP 2 */}
             {step === 2 && (
-              <motion.div
-                key="s2"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                className="space-y-4"
-              >
+              <motion.div className="space-y-4">
+
                 <input
                   type="password"
                   className={input}
@@ -268,12 +218,8 @@ export default function Register() {
 
             {/* STEP 3 */}
             {step === 3 && (
-              <motion.div
-                key="s3"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="space-y-4"
-              >
+              <motion.div className="space-y-4">
+
                 <select
                   className={input}
                   onChange={(e) =>
@@ -282,9 +228,7 @@ export default function Register() {
                 >
                   <option>Select filière</option>
                   {filieres.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name}
-                    </option>
+                    <option key={f.id} value={f.id}>{f.name}</option>
                   ))}
                 </select>
 
@@ -296,9 +240,7 @@ export default function Register() {
                 >
                   <option>Select level</option>
                   {levels.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.name}
-                    </option>
+                    <option key={l.id} value={l.id}>{l.name}</option>
                   ))}
                 </select>
 
@@ -307,21 +249,21 @@ export default function Register() {
             )}
 
           </AnimatePresence>
-
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
 
-/* NAV */
-function Nav({ next, prev, submit }) {
+/* NAV CLEAN */
+function Nav({ next, prev, submit, canGoNext = true }) {
   return (
     <div className="flex gap-3 pt-2">
+
       {prev && (
         <button
           onClick={prev}
-          className="w-1/2 p-3 rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-xl"
+          className="w-1/2 p-3 rounded-xl bg-white/10"
         >
           <ArrowLeft size={16} /> Back
         </button>
@@ -330,18 +272,22 @@ function Nav({ next, prev, submit }) {
       {submit ? (
         <button
           onClick={submit}
-          className="w-1/2 p-3 rounded-xl font-semibold
-          bg-gradient-to-r from-purple-500 via-cyan-500 to-blue-500"
+          className="w-1/2 p-3 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500"
         >
-          Create 🚀
+          Create 
         </button>
       ) : (
         <button
-          onClick={next}
-          className="w-1/2 p-3 rounded-xl font-semibold
-          bg-gradient-to-r from-purple-500 via-cyan-500 to-blue-500"
+          onClick={() => {
+            if (!canGoNext) return;
+            next();
+          }}
+          className={`w-1/2 p-3 rounded-xl font-semibold transition
+            ${canGoNext
+              ? "bg-gradient-to-r from-purple-500 to-cyan-500 hover:scale-[1.02]"
+              : "bg-white/5 text-white/20 cursor-not-allowed"}`}
         >
-          Next <ArrowRight size={16} />
+          Prochaine étape
         </button>
       )}
     </div>
