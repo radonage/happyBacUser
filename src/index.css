@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* 🌊 zoom lent background */
+@keyframes zoomSlow {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1.1); }
+}
+
+.animate-zoomSlow {
+  animation: zoomSlow 20s ease-in-out infinite;
+}
+
+/* 🧊 floating card */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 🌟 border glow animé */
+.borderGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(120deg, #7c3aed, #06b6d4, #3b82f6, #7c3aed);
+  background-size: 300% 300%;
+  animation: borderMove 6s linear infinite;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@keyframes borderMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* 🔵 focus glow inputs */
+.focusGlow {
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.4),
+              0 0 20px rgba(99,102,241,0.2);
+  border-color: rgba(99,102,241,0.6);
+}
+
+/* 💎 glass effect */
+.glass-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
