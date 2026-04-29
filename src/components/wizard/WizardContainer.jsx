@@ -27,35 +27,39 @@ export default function WizardContainer() {
   });
 
   /* =========================
-     🔥 SAFE AUTO SYNC USER
+     🔥 SAFE AUTO SYNC USER (GUEST FRIENDLY)
   ========================= */
-useEffect(() => {
-  if (!user) return;
+  useEffect(() => {
+    // MODE INVITÉ
+    if (!user) {
+      setSelection({
+        country: null,
+        filiere: null,
+        level: null,
+        subject: null,
+      });
+      setStep(0);
+      return;
+    }
 
-  const newSelection = {
-    country: user.countryId ? { id: user.countryId } : null,
-    filiere: user.filiereId ? { id: user.filiereId } : null,
-    level: user.levelId ? { id: user.levelId } : null,
-    subject: null,
-  };
+    const newSelection = {
+      country: user.countryId ? { id: user.countryId } : null,
+      filiere: user.filiereId ? { id: user.filiereId } : null,
+      level: user.levelId ? { id: user.levelId } : null,
+      subject: null,
+    };
 
-  setSelection(newSelection);
+    setSelection(newSelection);
 
-  // 🔥 LOGIQUE PROPRE : premier step manquant
-  let nextStep = 0;
+    let nextStep = 0;
 
-  if (!user.countryId) {
-    nextStep = 0;
-  } else if (!user.filiereId) {
-    nextStep = 1;
-  } else if (!user.levelId) {
-    nextStep = 2;
-  } else {
-    nextStep = 3; // subject
-  }
+    if (!user.countryId) nextStep = 0;
+    else if (!user.filiereId) nextStep = 1;
+    else if (!user.levelId) nextStep = 2;
+    else nextStep = 3;
 
-  setStep(nextStep);
-}, [user]);
+    setStep(nextStep);
+  }, [user]);
 
   /* =========================
      NAVIGATION
@@ -105,17 +109,6 @@ useEffect(() => {
   };
 
   const progress = (step / (steps.length - 1)) * 100;
-
-  /* =========================
-     LOADING GUARD (IMPORTANT)
-  ========================= */
-  if (!user) {
-    return (
-      <div className="text-white flex items-center justify-center h-[500px]">
-        Chargement...
-      </div>
-    );
-  }
 
   return (
     <div className="relative w-full min-h-[600px]">

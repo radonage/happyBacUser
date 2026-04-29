@@ -12,7 +12,8 @@ export default function Register() {
     const [step, setStep] = useState(1);
     const [search, setSearch] = useState("");
     const [openCountry, setOpenCountry] = useState(false);
-
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [openTerms, setOpenTerms] = useState(false);
     const [countries, setCountries] = useState([]);
     const [filieres, setFilieres] = useState([]);
     const [levels, setLevels] = useState([]);
@@ -311,7 +312,9 @@ export default function Register() {
                                 >
                                     <option>Select filière</option>
                                     {filieres.map((f) => (
-                                        <option key={f.id} value={f.id}>{f.name}</option>
+                                        <option key={f.id} value={f.id}>
+                                            {f.name}
+                                        </option>
                                     ))}
                                 </select>
 
@@ -323,25 +326,106 @@ export default function Register() {
                                 >
                                     <option>Select level</option>
                                     {levels.map((l) => (
-                                        <option key={l.id} value={l.id}>{l.name}</option>
+                                        <option key={l.id} value={l.id}>
+                                            {l.name}
+                                        </option>
                                     ))}
                                 </select>
 
+                                {/* ================= TERMS CHECKBOX ================= */}
+                                <div className="flex items-center gap-2 text-sm text-white/70">
+                                    <input
+                                        type="checkbox"
+                                        checked={acceptTerms}
+                                        onChange={(e) => setAcceptTerms(e.target.checked)}
+                                        className="w-4 h-4 accent-purple-500"
+                                    />
+
+                                    <span>
+                                        J'accepte les{" "}
+                                        <button
+                                            type="button"
+                                            onClick={() => setOpenTerms(true)}
+                                            className="text-purple-400 underline hover:text-purple-300"
+                                        >
+                                            conditions d'utilisation
+                                        </button>
+                                    </span>
+                                </div>
+
+                                {/* ================= SUBMIT ================= */}
                                 <button
                                     onClick={submit}
-                                    className="w-full p-3 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500"
+                                    disabled={!acceptTerms}
+                                    className={`w-full p-3 rounded-xl font-semibold transition
+            ${acceptTerms
+                                            ? "bg-gradient-to-r from-purple-500 to-cyan-500"
+                                            : "bg-white/10 text-white/30 cursor-not-allowed"
+                                        }`}
                                 >
                                     Créer compte
                                 </button>
 
-                                <button onClick={prev} className="w-full p-3 rounded-xl bg-white/10">
+                                <button
+                                    onClick={prev}
+                                    className="w-full p-3 rounded-xl bg-white/10"
+                                >
                                     Retour
                                 </button>
                             </motion.div>
                         )}
-
                     </AnimatePresence>
                 </div>
+                <AnimatePresence>
+                    {openTerms && (
+                        <motion.div
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <motion.div
+                                className="bg-black/90 border border-white/10 rounded-2xl max-w-3xl w-full p-6 max-h-[80vh] overflow-y-auto text-white"
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                            >
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-bold">
+                                        Conditions d’utilisation
+                                    </h2>
+
+                                    <button
+                                        onClick={() => setOpenTerms(false)}
+                                        className="text-white/60 hover:text-white"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+
+                                <div className="space-y-4 text-sm text-white/80 leading-relaxed">
+                                    <p><b>1. Acceptation des Conditions</b><br />En créant un compte sur HappyBac...</p>
+                                    <p><b>2. Description du Service</b><br />Plateforme éducative...</p>
+                                    <p><b>3. Inscription et Compte Utilisateur</b><br />Conditions d’âge et sécurité...</p>
+                                    <p><b>4. Décharge de Responsabilité</b><br />Résultats non garantis...</p>
+                                    <p><b>5. Propriété Intellectuelle</b><br />Contenus protégés...</p>
+                                    <p><b>6. Règles de Conduite</b><br />Respect obligatoire...</p>
+                                    <p><b>7. Données Personnelles</b><br />Protection RGPD...</p>
+                                    <p><b>8. Suspension</b><br />Cas de fraude ou abus...</p>
+                                    <p><b>9. Modifications</b><br />Conditions évolutives...</p>
+                                    <p><b>10. Contact</b><br />Support plateforme...</p>
+                                </div>
+
+                                <button
+                                    onClick={() => setOpenTerms(false)}
+                                    className="mt-6 w-full p-3 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500"
+                                >
+                                    J’ai compris
+                                </button>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

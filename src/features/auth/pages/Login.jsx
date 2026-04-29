@@ -5,9 +5,15 @@ import { useUser } from "../../../context/UserContext";
 import { countries } from "../../../data/countries";
 
 export default function Login() {
+
   const [form, setForm] = useState({ email: "", password: "" });
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [showForgot, setShowForgot] = useState(false);
+
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingForgot, setLoadingForgot] = useState(false);
   const [focus, setFocus] = useState(false);
 
   const { setUser, setSelectedCountry } = useUser();
@@ -18,6 +24,7 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -27,21 +34,13 @@ export default function Login() {
         "https://happybacbacendfinal.fly.dev/api/auth/login",
         form
       );
-
+      
       const userData = res.data;
-
-      // 👤 SET USER (auto sync context + localStorage)
       setUser(userData);
-
-      // 🌍 FIND USER COUNTRY
       const userCountry = countries.find(
         (c) => c.id === userData.countryId
       );
-
-      // 🌍 SET COUNTRY (auto sync context + localStorage)
       setSelectedCountry(userCountry || null);
-
-      // 🚀 NAVIGATE
       navigate("/");
     } catch (err) {
       setError("Email ou mot de passe invalide");
@@ -50,10 +49,34 @@ export default function Login() {
     }
   };
 
+  const handleForgotPassword = async () => {
+
+    setMessage("");
+    setError("");
+    setLoadingForgot(true);
+
+    try {
+      await axios.post(
+        "https://happybacbacendfinal.fly.dev/api/auth/forgot-password",
+        null,
+        {
+          params: { email: forgotEmail }
+        }
+      );
+
+      setMessage("Email envoyé ! Vérifiez votre boîte mail.");
+      setShowForgot(false);
+      setForgotEmail("");
+
+    } catch (err) {
+      setError("Erreur lors de l'envoi de l'email");
+    } finally {
+      setLoadingForgot(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050505] text-white relative overflow-hidden">
-
-      {/* 🌈 BACKGROUND ANIMÉ ZOOM */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 scale-110 animate-zoomSlow">
           <img
@@ -63,31 +86,25 @@ export default function Login() {
         </div>
         <div className="absolute inset-0 bg-black/40" />
       </div>
-
-      {/* 💎 FLOATING GLASS CARD */}
-      <div className="relative w-full max-w-md p-10 rounded-3xl overflow-hidden
-        glass-card animate-float">
-
-        {/* 🌟 BORDER GLOW ANIMÉ */}
+      <div className="relative w-full max-w-md p-10 rounded-3xl overflow-hidden glass-card animate-float">
         <div className="absolute inset-0 rounded-3xl borderGlow" />
-
         <div className="relative z-10">
-
           <h1 className="text-3xl font-bold text-center mb-2">
             Heureux de vous revoir
-          </h1>
-
+          </h1>                    
           <p className="text-center text-white/60 mb-8">
             Connectez vous pour suivre vos cours
           </p>
-
           {error && (
-            <div className="mb-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-xl">
+            <div className="mb-3 text-sm text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-xl">
               {error}
             </div>
           )}
-
-          {/* EMAIL */}
+          {message && (
+            <div className="mb-3 text-sm text-green-400 bg-green-500/10 border border-green-500/20 p-3 rounded-xl">
+              {message}
+            </div>
+          )}
           <div className="mb-4">
             <label className="text-xs text-white/60">Email</label>
             <input
@@ -97,12 +114,10 @@ export default function Login() {
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
               placeholder="you@example.com"
-              className={`w-full mt-1 p-3 rounded-xl transition
-                bg-black/30 border border-white/10 outline-none
-                ${focus ? "focusGlow" : ""}`}
+              className={`w-full mt-1 p-3 rounded-xl transition bg-black/30 border border-white/10 outline-none ${focus ? "focusGlow" : ""}`}
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-2">
             <label className="text-xs text-white/60">Mot de passe</label>
             <input
               type="password"
@@ -112,25 +127,42 @@ export default function Login() {
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
               placeholder="••••••••"
-              className={`w-full mt-1 p-3 rounded-xl transition
-                bg-black/30 border border-white/10 outline-none
-                ${focus ? "focusGlow" : ""}`}
+              className={`w-full mt-1 p-3 rounded-xl transition bg-black/30 border border-white/10 outline-none ${focus ? "focusGlow" : ""}`}
             />
           </div>
+          <div className="text-right mb-5">
+            <button
+              type="button"
+              onClick={() => setShowForgot(!showForgot)}
+              className="text-xs text-white/50 hover:text-white transition"
+            >
+              Mot de passe oublié ?
+            </button>
+          </div>
+          {showForgot && (
+            <div className="mb-5 p-4 rounded-xl bg-white/5 border border-white/10">
+              <input
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                placeholder="Votre email"
+                className="w-full p-2 rounded-lg bg-black/30 border border-white/10 outline-none mb-3"
+              />
+              <button
+                onClick={handleForgotPassword}
+                disabled={loadingForgot}
+                className="w-full p-2 rounded-lg bg-cyan-500 hover:bg-cyan-600 transition"
+              >
+                {loadingForgot ? "Envoi..." : "Envoyer le lien"}
+              </button>
+            </div>
+          )}
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full p-3 rounded-xl font-semibold
-            bg-gradient-to-r from-purple-500 via-cyan-500 to-blue-500
-            hover:scale-[1.03] active:scale-[0.97]
-            transition duration-300
-            shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+            className="w-full p-3 rounded-xl font-semibold bg-gradient-to-r from-purple-500 via-cyan-500 to-blue-500 hover:scale-[1.03] active:scale-[0.97] transition duration-300 shadow-[0_0_30px_rgba(99,102,241,0.4)]"
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
-          <p className="text-center text-xs text-white/40 mt-6">
-            Mot de passe oublié ?
-          </p>
         </div>
       </div>
     </div>
