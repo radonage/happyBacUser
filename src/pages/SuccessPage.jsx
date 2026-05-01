@@ -24,21 +24,18 @@ export default function SuccessPage() {
         <p className="text-gray-400 mt-3">
           Ton accès a été activé avec succès. Tu peux maintenant profiter de tout le contenu.
         </p>
-
         <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
           <div className="flex items-center justify-center gap-2 text-emerald-300">
             <Sparkles size={16} />
             <span>Accès Premium activé</span>
           </div>
         </div>
-
         <button
           onClick={() => navigate("/")}
           className="mt-6 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 transition font-semibold"
         >
           Commencer maintenant
         </button>
-
         <p className="text-xs text-gray-500 mt-3">
           Merci pour ta confiance 💚
         </p>
