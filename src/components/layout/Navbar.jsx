@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 
 import { useUser } from "../../context/UserContext";
@@ -15,6 +15,8 @@ import {
   LogIn,
   UserPlus,
   LogOut,
+  Menu,
+  X
 } from "lucide-react";
 
 export default function Navbar() {
@@ -22,11 +24,8 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [hovered, setHovered] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  /* =========================
-     🌍 SAFE IP DETECTION FIXED
-  ========================= */
   useEffect(() => {
     const detectCountryFromIP = async () => {
       if (selectedCountry) return;
@@ -37,45 +36,19 @@ export default function Navbar() {
 
         const countryCode = data?.country;
 
-        if (!countryCode) return;
-
         const country = countries.find(
-          (c) =>
-            c.code?.toLowerCase?.() === countryCode.toLowerCase()
+          (c) => c.code?.toLowerCase?.() === countryCode?.toLowerCase()
         );
 
         if (country) {
           setSelectedCountry(country);
-          localStorage.setItem(
-            "selectedCountry",
-            JSON.stringify(country)
-          );
-        } else {
-          console.log("Country not found in list:", countryCode);
+          localStorage.setItem("selectedCountry", JSON.stringify(country));
         }
-      } catch (err) {
-        console.log("IP detection failed:", err);
-      }
+      } catch {}
     };
 
     detectCountryFromIP();
-  }, [selectedCountry, setSelectedCountry]);
-
-  /* =========================
-     LOCAL STORAGE SYNC
-  ========================= */
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedCountry = localStorage.getItem("selectedCountry");
-
-    if (storedUser && !user) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    if (storedCountry && !selectedCountry) {
-      setSelectedCountry(JSON.parse(storedCountry));
-    }
-  }, [user, selectedCountry, setUser, setSelectedCountry]);
+  }, []);
 
   const menu = [
     { label: "Accueil", icon: Home, path: "/" },
@@ -86,131 +59,164 @@ export default function Navbar() {
     { label: "Contact", icon: Mail, path: "/contact" },
   ];
 
-  const countryName =
-    selectedCountry?.name ?? "Détection du pays...";
+  const countryName = selectedCountry?.name ?? "Détection...";
+
+  const NavItem = ({ item, onClick }) => {
+    const Icon = item.icon;
+    const active = location.pathname === item.path;
+
+    return (
+      <motion.div
+        onClick={() => {
+          navigate(item.path);
+          onClick?.();
+        }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
+        className={clsx(
+          "flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition",
+          active
+            ? "bg-white/10 text-white"
+            : "text-white/60 hover:text-white hover:bg-white/5"
+        )}
+      >
+        <Icon size={16} />
+        <span className="text-sm">{item.label}</span>
+      </motion.div>
+    );
+  };
 
   return (
-    <div className="relative w-full h-16 flex items-center justify-between px-6
-      bg-black/25 backdrop-blur-3xl
-      border-b border-white/10
-      shadow-[0_10px_60px_rgba(0,0,0,0.6)]
-      overflow-hidden">
+    <div className="w-full fixed top-0 z-50">
 
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-transparent to-cyan-500/10 blur-3xl" />
 
-      <div className="relative z-10 flex items-center gap-3 text-xs text-white/70">
-        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-        <span>📍 {countryName}</span>
+      <div className="hidden md:flex h-16 items-center justify-between px-6
+        bg-black/30 backdrop-blur-2xl border-b border-white/10">
+
+        <div className="text-xs text-white/70 flex items-center gap-2">
+          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+          📍 {countryName}
+        </div>
+
+        <div className="flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/10">
+          {menu.map((item) => (
+            <NavItem key={item.path} item={item} />
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+
+          {!user && (
+            <>
+              <button onClick={() => navigate("/login")} className="text-sm text-white/70 hover:text-white">
+                Login
+              </button>
+              <button onClick={() => navigate("/register")} className="text-sm px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20">
+                Register
+              </button>
+            </>
+          )}
+
+          {user && (
+            <>
+              <div className="text-sm text-white/70 hidden lg:block">
+                {user.firstName} {user.lastName}
+              </div>
+
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                {user.firstName?.charAt(0)}
+              </div>
+
+              <button
+                onClick={() => {
+                  setUser(null);
+                  localStorage.clear();
+                  navigate("/login");
+                }}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500/70"
+              >
+                <LogOut size={14} />
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="relative z-10 flex items-center gap-2 bg-white/5 px-2 py-1 rounded-2xl border border-white/10 backdrop-blur-xl">
-        {menu.map((item) => {
-          const Icon = item.icon;
-          const active = location.pathname === item.path;
+      <div className="md:hidden flex items-center justify-between h-14 px-4
+        bg-black/40 backdrop-blur-xl border-b border-white/10">
 
-          return (
-            <motion.div
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              onMouseEnter={() => setHovered(item.path)}
-              onMouseLeave={() => setHovered(null)}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
-              className={clsx(
-                "relative flex items-center gap-2 px-3 py-1.5 rounded-xl cursor-pointer transition-all",
-                active ? "text-white" : "text-white/60 hover:text-white"
-              )}
-            >
-              {active && (
-                <motion.div
-                  layoutId="navbar-pill"
-                  className="absolute inset-0 rounded-xl
-                  bg-gradient-to-r from-purple-500/25 to-cyan-500/20
-                  shadow-[0_0_25px_rgba(99,102,241,0.25)]"
-                />
-              )}
+        <span className="text-xs text-white/70">📍 {countryName}</span>
 
-              <Icon
-                size={16}
-                className={clsx(
-                  "relative z-10 transition duration-300",
-                  active
-                    ? "text-cyan-300"
-                    : "text-white/70 hover:text-cyan-300"
-                )}
-              />
-
-              <span className="text-sm relative z-10">{item.label}</span>
-            </motion.div>
-          );
-        })}
+        <button onClick={() => setMobileOpen(true)}>
+          <Menu />
+        </button>
       </div>
 
-      <div className="relative z-10 flex items-center gap-3">
-
-        {!user && (
-          <div className="flex items-center gap-2">
-            {[
-              { label: "Se connecter", icon: LogIn, path: "/login" },
-              { label: "S'inscrire", icon: UserPlus, path: "/register" },
-            ].map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <motion.div
-                  key={item.path}
-                  onClick={() => navigate(item.path)}
-                  whileHover={{ scale: 1.08 }}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl
-                    text-white/70 hover:text-white
-                    hover:bg-white/10 transition cursor-pointer"
-                >
-                  <Icon size={14} className="text-cyan-300" />
-                  <span className="text-sm">{item.label}</span>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
-
-        {user && (
+      <AnimatePresence>
+        {mobileOpen && (
           <>
-            <div className="hidden md:flex flex-col leading-tight">
-              <span className="text-xs text-white/50">
-                Bienvenue
-              </span>
-              <span className="text-sm font-semibold bg-gradient-to-r from-purple-300 via-cyan-300 to-pink-300 bg-clip-text text-transparent">
-                {user?.firstName} {user?.lastName}
-              </span>
-
-            </div>
             <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              className="w-9 h-9 rounded-full
-              bg-gradient-to-br from-purple-500 via-pink-500 to-cyan-500
-              flex items-center justify-center
-              text-white font-bold
-              shadow-[0_0_30px_rgba(168,85,247,0.6)]"
-            >
-              {user?.name?.charAt(0) || "U"}
-            </motion.div>
+              className="fixed inset-0 bg-black/60 z-40"
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
 
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              onClick={() => {
-                setUser(null);
-                setSelectedCountry(null);
-                localStorage.removeItem("user");
-                localStorage.removeItem("selectedCountry");
-                navigate("/login");
-              }}
-              className="w-9 h-9 rounded-full bg-red-500/70 flex items-center justify-center cursor-pointer"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 120 }}
+              className="fixed right-0 top-0 h-full w-[80%] max-w-sm
+                bg-black/90 backdrop-blur-2xl z-50 p-5 flex flex-col gap-4"
             >
-              <LogOut size={16} />
+
+              <div className="flex justify-between items-center">
+                <span className="text-white font-semibold">Menu</span>
+                <button onClick={() => setMobileOpen(false)}>
+                  <X />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-2 mt-4">
+                {menu.map((item) => (
+                  <NavItem
+                    key={item.path}
+                    item={item}
+                    onClick={() => setMobileOpen(false)}
+                  />
+                ))}
+              </div>
+
+              <div className="mt-auto pt-4 border-t border-white/10">
+                {!user ? (
+                  <div className="flex flex-col gap-2">
+                    <button onClick={() => navigate("/login")} className="py-2 rounded-xl bg-white/10">
+                      Login
+                    </button>
+                    <button onClick={() => navigate("/register")} className="py-2 rounded-xl bg-white/20">
+                      Register
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setUser(null);
+                      localStorage.clear();
+                      navigate("/login");
+                    }}
+                    className="w-full py-2 rounded-xl bg-red-500/70"
+                  >
+                    Logout
+                  </button>
+                )}
+              </div>
+
             </motion.div>
           </>
         )}
-      </div>
+      </AnimatePresence>
     </div>
   );
 }

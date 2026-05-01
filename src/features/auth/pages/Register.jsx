@@ -31,7 +31,6 @@ export default function Register() {
         levelId: "",
     });
 
-    /* ================= PASSWORD ================= */
     const password = form.password || "";
     const confirm = form.confirmPassword || "";
 
@@ -46,23 +45,18 @@ export default function Register() {
     const passwordMatch = password === confirm && confirm.length > 0;
     const canPasswordNext = passwordStrong && passwordMatch;
 
-    /* ================= COUNTRIES ================= */
     useEffect(() => {
         const load = async () => {
             const res = await fetch("https://happybacbacendfinal.fly.dev/api/countries");
             const backend = await res.json();
-
             const rest = await fetch(
                 "https://restcountries.com/v3.1/all?fields=name,idd,flags"
             );
-
             const restData = await rest.json();
-
             const enriched = backend.map((c) => {
                 const match = restData.find((r) =>
                     r.name.common.toLowerCase().includes(c.name.toLowerCase())
                 );
-
                 return {
                     id: c.id,
                     name: c.name,

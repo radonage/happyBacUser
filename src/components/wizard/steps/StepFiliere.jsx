@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../../../api/axios";
+import { Check, Sparkles } from "lucide-react";
 
 export default function StepFiliere({ countryId, onSelect }) {
   const [filieres, setFilieres] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!countryId) return;
@@ -12,20 +14,154 @@ export default function StepFiliere({ countryId, onSelect }) {
       .catch(console.error);
   }, [countryId]);
 
-  return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Select Filière</h2>
+  const handlePay = async (f) => {
+    try {
+      setLoading(true);
 
-      <div className="grid grid-cols-2 gap-4">
-        {filieres.map((f) => (
-          <div
-            key={f.id}
-            onClick={() => onSelect(f)}
-            className="p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-purple-600/20"
-          >
-            {f.name}
+      const res = await api.post("/payments/create", {
+        filiereId: f.id
+      });
+
+      window.location.href = res.data.url;
+
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors du paiement");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+
+      {/* TITRE */}
+      <div>
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 text-transparent bg-clip-text">
+          Choisis ta filière
+        </h2>
+        <p className="text-gray-400 text-sm mt-1">
+          Accède à tout le contenu avec un seul paiement
+        </p>
+      </div>
+
+      {/* SCROLL AREA (STYLE iOS INVISIBLE) */}
+      <div className="relative">
+
+        {/* fade top */}
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-10  from-black/60 to-transparent" />
+
+        {/* fade bottom */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 z-10 bg-gradient-to-t from-black/70 to-transparent" />
+
+        {/* CONTAINER SCROLL INVISIBLE */}
+        <div className="
+          max-h-[60vh]
+          overflow-y-auto
+          scroll-smooth
+          pr-2
+
+          [scrollbar-width:none]
+          [-ms-overflow-style:none]
+          [&::-webkit-scrollbar]:hidden
+        ">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pb-8">
+
+            {filieres.map((f) => (
+              <div
+                key={f.id}
+                className="group relative rounded-2xl p-[1px]
+                  bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500
+                  hover:scale-[1.02] transition duration-300"
+              >
+
+                {/* CARD (sans bordure externe inutile) */}
+                <div className="rounded-2xl bg-black/40 backdrop-blur-xl
+                  p-5 flex flex-col justify-between min-h-[180px]
+                  relative overflow-hidden">
+
+                  {/* glow */}
+                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500 blur-[90px] opacity-20" />
+
+                  {/* CONTENT */}
+                  <div
+                    onClick={() => onSelect(f)}
+                    className="cursor-pointer relative z-10"
+                  >
+
+                    {/* HEADER */}
+                    <div className="flex items-center justify-between">
+
+                      <h3 className="text-lg font-semibold text-white">
+                        {f.name}
+                      </h3>
+
+                      <span className="flex items-center gap-1 text-xs text-emerald-300 bg-emerald-500/10 px-2 py-1 rounded-full">
+                        <Sparkles size={12} />
+                        Premium
+                      </span>
+
+                    </div>
+
+                    {/* DESCRIPTION */}
+                    <p className="text-gray-400 text-sm mt-2">
+                      Accès complet aux cours et examens
+                    </p>
+
+                    {/* FEATURES */}
+                    <div className="mt-3 space-y-1 text-xs text-gray-300">
+
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-emerald-400" />
+                        Parcours personnalisé
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-emerald-400" />
+                        Examens corrigés
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Check size={14} className="text-emerald-400" />
+                        Recommandations IA
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  {/* CTA */}
+                  <div className="mt-5 relative z-10">
+
+                    <button
+                      onClick={() => handlePay(f)}
+                      disabled={loading}
+                      className="w-full py-3 rounded-xl font-semibold
+                        bg-gradient-to-r from-emerald-500 to-purple-600
+                        shadow-lg shadow-purple-500/20
+                        hover:shadow-purple-500/40
+                        hover:scale-[1.02]
+                        transition-all duration-300
+                        disabled:opacity-50"
+                    >
+                      {loading ? "Traitement..." : "Payer et commencer"}
+                    </button>
+
+                    <p className="text-[11px] text-gray-400 text-center mt-2">
+                      Paiement sécurisé via Stripe
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+            ))}
+
           </div>
-        ))}
+
+        </div>
       </div>
     </div>
   );
