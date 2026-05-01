@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import api from "../../../api/axios";
 import { Check, Sparkles, Star } from "lucide-react";
 import { useUser } from "../../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function StepFiliere({ countryId, onSelect }) {
-  
+
   const { user } = useUser();
 
   const [filieres, setFilieres] = useState([]);
@@ -24,6 +25,8 @@ export default function StepFiliere({ countryId, onSelect }) {
       .finally(() => setLoading(false));
   }, [countryId]);
 
+  const navigate = useNavigate();
+
   const handlePay = async (f) => {
     try {
       setLoadingId(f.id);
@@ -31,7 +34,7 @@ export default function StepFiliere({ countryId, onSelect }) {
       console.log("👤 USER:", user);
 
       if (!user?.email) {
-        alert("Utilisateur non connecté");
+        navigate("/login");
         return;
       }
 
