@@ -4,6 +4,7 @@ import { Check, Sparkles, Star } from "lucide-react";
 import { useUser } from "../../../context/UserContext";
 
 export default function StepFiliere({ countryId, onSelect }) {
+  
   const { user } = useUser();
 
   const [filieres, setFilieres] = useState([]);
@@ -63,8 +64,6 @@ export default function StepFiliere({ countryId, onSelect }) {
 
   return (
     <div className="space-y-6">
-
-      {/* HEADER */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900">
           Choisis ta filière
@@ -73,8 +72,6 @@ export default function StepFiliere({ countryId, onSelect }) {
           Accède à tout le contenu avec un seul paiement
         </p>
       </div>
-
-      {/* SCROLL AREA */}
       <div className="max-h-[80vh] overflow-y-auto scrollbar-hide pr-2">
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -155,7 +152,6 @@ export default function StepFiliere({ countryId, onSelect }) {
   );
 }
 
-/* Skeleton */
 function SkeletonCard() {
   return (
     <div className="animate-pulse bg-white border border-gray-200 rounded-2xl overflow-hidden">
