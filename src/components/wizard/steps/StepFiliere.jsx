@@ -18,11 +18,19 @@ export default function StepFiliere({ countryId, onSelect }) {
     try {
       setLoading(true);
 
-      const res = await api.post("/payments/create", {
+      // ✅ CORRECTION : endpoint backend réel
+      const res = await api.post("/payments/checkout", {
         filiereId: f.id
       });
 
-      window.location.href = res.data.url;
+      const url = res?.data?.url;
+
+      if (!url) {
+        throw new Error("URL de paiement introuvable");
+      }
+
+      // redirection Stripe
+      window.location.href = url;
 
     } catch (err) {
       console.error(err);
@@ -47,7 +55,7 @@ export default function StepFiliere({ countryId, onSelect }) {
 
       <div className="relative">
 
-        <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-10  from-black/60 to-transparent" />
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-10 from-black/60 to-transparent" />
 
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 z-10 bg-gradient-to-t from-black/70 to-transparent" />
 
@@ -56,7 +64,6 @@ export default function StepFiliere({ countryId, onSelect }) {
           overflow-y-auto
           scroll-smooth
           pr-2
-
           [scrollbar-width:none]
           [-ms-overflow-style:none]
           [&::-webkit-scrollbar]:hidden
@@ -72,7 +79,6 @@ export default function StepFiliere({ countryId, onSelect }) {
                   hover:scale-[1.02] transition duration-300"
               >
 
-                {/* CARD (sans bordure externe inutile) */}
                 <div className="rounded-2xl bg-black/40 backdrop-blur-xl
                   p-5 flex flex-col justify-between min-h-[180px]
                   relative overflow-hidden">
@@ -86,7 +92,6 @@ export default function StepFiliere({ countryId, onSelect }) {
                     className="cursor-pointer relative z-10"
                   >
 
-                    {/* HEADER */}
                     <div className="flex items-center justify-between">
 
                       <h3 className="text-lg font-semibold text-white">
@@ -100,12 +105,10 @@ export default function StepFiliere({ countryId, onSelect }) {
 
                     </div>
 
-                    {/* DESCRIPTION */}
                     <p className="text-gray-400 text-sm mt-2">
                       Accès complet aux cours et examens
                     </p>
 
-                    {/* FEATURES */}
                     <div className="mt-3 space-y-1 text-xs text-gray-300">
 
                       <div className="flex items-center gap-2">

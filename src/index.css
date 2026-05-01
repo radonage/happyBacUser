@@ -23,7 +23,6 @@
   animation: float 6s ease-in-out infinite;
 }
 
-
 .borderGlow {
   position: absolute;
   inset: 0;
@@ -40,7 +39,7 @@
 }
 
 @keyframes borderMove {
-  0% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; }   
   100% { background-position: 100% 50%; }
 }
 
