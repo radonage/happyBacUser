@@ -47,7 +47,7 @@ export default function Register() {
 
     useEffect(() => {
         const load = async () => {
-            const res = await fetch("http://localhost:8080/api/countries");
+            const res = await fetch("https://happybacbacendfinal.fly.dev/api/countries");
             const backend = await res.json();
             const rest = await fetch(
                 "https://restcountries.com/v3.1/all?fields=name,idd,flags"
@@ -88,7 +88,7 @@ export default function Register() {
     /* ================= FILIERES ================= */
     useEffect(() => {
         if (!form.country?.id) return;
-        fetch(`http://localhost:8080/api/filieres?countryId=${form.country.id}`)
+        fetch(`https://happybacbacendfinal.fly.dev/api/filieres?countryId=${form.country.id}`)
             .then((r) => r.json())
             .then(setFilieres);
     }, [form.country]);
@@ -96,7 +96,7 @@ export default function Register() {
     /* ================= LEVELS ================= */
     useEffect(() => {
         if (!form.country?.id || !form.filiereId) return;
-        fetch(`http://localhost:8080/api/levels/filter?countryId=${form.country.id}&filiereId=${form.filiereId}`)
+        fetch(`https://happybacbacendfinal.fly.dev/api/levels/filter?countryId=${form.country.id}&filiereId=${form.filiereId}`)
             .then((r) => r.json())
             .then(setLevels);
     }, [form.country, form.filiereId]);

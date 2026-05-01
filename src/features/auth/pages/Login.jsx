@@ -31,7 +31,7 @@ export default function Login() {
 
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://happybacbacendfinal.fly.dev/api/auth/login",
         form
       );
       
@@ -58,7 +58,7 @@ export default function Login() {
 
     try {
       await axios.post(
-        "http://localhost:8080/api/auth/forgot-password",
+        "https://happybacbacendfinal.fly.dev/api/auth/forgot-password",
         null,
         {
           params: { email: forgotEmail }
