@@ -1,7 +1,7 @@
 import { XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function CancelPage() {
+export default function Cancel() {
     
   const navigate = useNavigate();
 

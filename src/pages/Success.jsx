@@ -1,7 +1,8 @@
 import { CheckCircle, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function SuccessPage() {
+export default function Success() {
+  
   const navigate = useNavigate();
 
   return (

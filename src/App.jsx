@@ -5,8 +5,8 @@ import Navbar from "./components/layout/Navbar";
 
 import DashboardHome from "./features/dashboard/pages/DashboardHome";
 
-import SuccessPage from "./pages/SuccessPage";
-import CancelPage from "./pages/CancelPage";
+import SuccessPage from "./pages/Success";
+import CancelPage from "./pages/Cancel";
 
 import CourseList from "./features/course/pages/CourseList";
 import CourseDetails from "./features/course/pages/CourseDetails";
@@ -26,7 +26,6 @@ export default function App() {
 
   const hideNavbarRoutes = ["/success", "/cancel"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
-
 
   return (
     <div className="flex min-h-screen bg-black text-white">
