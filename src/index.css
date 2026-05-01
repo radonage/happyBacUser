@@ -38,6 +38,15 @@
   mask-composite: exclude;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @keyframes borderMove {
   0% { background-position: 0% 50%; }   
   100% { background-position: 100% 50%; }
