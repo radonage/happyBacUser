@@ -14,7 +14,6 @@ export default function CountrySelect({ value, onSelect }) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Select Country</h2>
-
       <div className="relative">
         <select
           value={value?.id || ""}

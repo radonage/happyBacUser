@@ -3,6 +3,7 @@ import api from "../../../api/axios";
 import { Check, Sparkles, Star } from "lucide-react";
 import { useUser } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function StepFiliere({ countryId, onSelect }) {
 
@@ -34,7 +35,12 @@ export default function StepFiliere({ countryId, onSelect }) {
       console.log("👤 USER:", user);
 
       if (!user?.email) {
-        navigate("/login");
+        toast.error("Merci de vous authentifier pour acheter ce cours");
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1200);
+
         return;
       }
 

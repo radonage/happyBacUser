@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Sidebar from "./components/layout/Sidebar";
 import Navbar from "./components/layout/Navbar";
@@ -21,14 +21,22 @@ import Contact from "./pages/Contact";
 import Register from "./features/auth/pages/Register";
 import Login from "./features/auth/pages/Login";
 import Explorer from "./pages/Explorer";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
+  const location = useLocation();
 
   const hideNavbarRoutes = ["/success", "/cancel"];
-  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
+
+  const hideNavbar = hideNavbarRoutes.some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   return (
     <div className="flex min-h-screen bg-black text-white">
+      <ToastContainer position="bottom-right"
+        autoClose={3000} />
       <div className="flex-1 flex flex-col">
         {!hideNavbar && <Navbar />}
         <Routes>
