@@ -12,20 +12,27 @@ import {
   Compass,
   Globe,
   Mail,
-  LogIn,
-  UserPlus,
   LogOut,
   Menu,
   X
 } from "lucide-react";
 
 export default function Navbar() {
-  const { selectedCountry, setSelectedCountry, user, setUser } = useUser();
+  const {
+    selectedCountry,
+    setSelectedCountry,
+    user,
+    setUser,
+    theme
+  } = useUser();
+
   const navigate = useNavigate();
   const location = useLocation();
-
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const protectedRoutes = ["/exams"];
+
+  // ================= COUNTRY DETECTION =================
   useEffect(() => {
     const detectCountryFromIP = async () => {
       if (selectedCountry) return;
@@ -34,22 +41,24 @@ export default function Navbar() {
         const res = await fetch("https://api.country.is/");
         const data = await res.json();
 
-        const countryCode = data?.country;
-
         const country = countries.find(
-          (c) => c.code?.toLowerCase?.() === countryCode?.toLowerCase()
+          (c) =>
+            c.code?.toLowerCase?.() === data?.country?.toLowerCase()
         );
 
         if (country) {
           setSelectedCountry(country);
           localStorage.setItem("selectedCountry", JSON.stringify(country));
         }
-      } catch { }
+      } catch {}
     };
 
     detectCountryFromIP();
   }, []);
 
+  const countryName = selectedCountry?.name ?? "Détection...";
+
+  // ================= MENU =================
   const menu = [
     { label: "Accueil", icon: Home, path: "/" },
     { label: "Matières", icon: BookOpen, path: "/explorer" },
@@ -59,23 +68,24 @@ export default function Navbar() {
     { label: "Contact", icon: Mail, path: "/contact" },
   ];
 
-  const countryName = selectedCountry?.name ?? "Détection...";
-
+  // ================= NAV ITEM =================
   const NavItem = ({ item, onClick }) => {
     const Icon = item.icon;
     const active = location.pathname === item.path;
 
+    const handleClick = () => {
+      if (protectedRoutes.includes(item.path) && !user) {
+        navigate("/login");
+      } else {
+        navigate(item.path);
+      }
+
+      onClick?.();
+    };
+
     return (
       <motion.div
-        onClick={() => {
-          if (item.path === "/exams" && !user) {
-            navigate("/login");
-          } else {
-            navigate(item.path);
-          }
-
-          onClick?.();
-        }}
+        onClick={handleClick}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
         className={clsx(
@@ -91,10 +101,17 @@ export default function Navbar() {
     );
   };
 
+  // ================= LOGOUT CLEAN =================
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   return (
-    <div className="w-full fixed top-0 z-50">
+    <div className={`w-full fixed top-0 z-50 ${theme === "dark" ? "dark" : ""}`}>
 
-
+      {/* ================= DESKTOP ================= */}
       <div className="hidden md:flex h-16 items-center justify-between px-6
         bg-black/30 backdrop-blur-2xl border-b border-white/10">
 
@@ -133,11 +150,7 @@ export default function Navbar() {
               </div>
 
               <button
-                onClick={() => {
-                  setUser(null);
-                  localStorage.clear();
-                  navigate("/login");
-                }}
+                onClick={handleLogout}
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500/70"
               >
                 <LogOut size={14} />
@@ -147,6 +160,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* ================= MOBILE BAR ================= */}
       <div className="md:hidden flex items-center justify-between h-14 px-4
         bg-black/40 backdrop-blur-xl border-b border-white/10">
 
@@ -157,6 +171,7 @@ export default function Navbar() {
         </button>
       </div>
 
+      {/* ================= MOBILE MENU ================= */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -206,11 +221,7 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <button
-                    onClick={() => {
-                      setUser(null);
-                      localStorage.clear();
-                      navigate("/login");
-                    }}
+                    onClick={handleLogout}
                     className="w-full py-2 rounded-xl bg-red-500/70"
                   >
                     Logout
