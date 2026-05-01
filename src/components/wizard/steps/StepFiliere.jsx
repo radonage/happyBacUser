@@ -39,7 +39,7 @@ export default function StepFiliere({ countryId, onSelect }) {
 
         setTimeout(() => {
           navigate("/login");
-        }, 1200);
+        }, 500);
 
         return;
       }
