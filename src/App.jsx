@@ -23,10 +23,15 @@ import Login from "./features/auth/pages/Login";
 import Explorer from "./pages/Explorer";
 
 export default function App() {
+
+  const hideNavbarRoutes = ["/success", "/cancel"];
+  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
+
+
   return (
     <div className="flex min-h-screen bg-black text-white">
       <div className="flex-1 flex flex-col">
-        <Navbar />
+        {!hideNavbar && <Navbar />}
         <Routes>
           <Route path="/" element={<DashboardHome />} />
           <Route path="/explorer" element={<Explorer />} />
