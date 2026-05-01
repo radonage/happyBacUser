@@ -5,6 +5,9 @@ import Navbar from "./components/layout/Navbar";
 
 import DashboardHome from "./features/dashboard/pages/DashboardHome";
 
+import SuccessPage from "./pages/SuccessPage";
+import CancelPage from "./pages/CancelPage";
+
 import CourseList from "./features/course/pages/CourseList";
 import CourseDetails from "./features/course/pages/CourseDetails";
 
@@ -24,21 +27,23 @@ export default function App() {
     <div className="flex min-h-screen bg-black text-white">
       <div className="flex-1 flex flex-col">
         <Navbar />
-          <Routes>
-            <Route path="/" element={<DashboardHome />} />
-            <Route path="/explorer" element={<Explorer />} />
-            <Route path="/courses" element={<CourseList />} />
-            <Route path="/courses/:id" element={<CourseDetails />} />
-            <Route path="/exercises" element={<ExerciseList />} />
-            <Route path="/matiere" element={<Matiere />} />
-            <Route path="/exams" element={<ExamPage />} />
-            <Route path="/orientation" element={<OrientationPage />} />
-            <Route path="/etudes" element={<EtudesPage />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<DashboardHome />} />
+          <Route path="/explorer" element={<Explorer />} />
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/courses/:id" element={<CourseDetails />} />
+          <Route path="/exercises" element={<ExerciseList />} />
+          <Route path="/matiere" element={<Matiere />} />
+          <Route path="/exams" element={<ExamPage />} />
+          <Route path="/orientation" element={<OrientationPage />} />
+          <Route path="/etudes" element={<EtudesPage />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/cancel" element={<CancelPage />} />
+        </Routes>
+      </div>
     </div>
   );
 }
