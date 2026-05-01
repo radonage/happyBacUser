@@ -45,16 +45,12 @@ export default function StepFiliere({ countryId, onSelect }) {
         </p>
       </div>
 
-      {/* SCROLL AREA (STYLE iOS INVISIBLE) */}
       <div className="relative">
 
-        {/* fade top */}
         <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-10  from-black/60 to-transparent" />
 
-        {/* fade bottom */}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 z-10 bg-gradient-to-t from-black/70 to-transparent" />
 
-        {/* CONTAINER SCROLL INVISIBLE */}
         <div className="
           max-h-[60vh]
           overflow-y-auto

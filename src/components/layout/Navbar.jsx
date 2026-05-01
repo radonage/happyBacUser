@@ -44,7 +44,7 @@ export default function Navbar() {
           setSelectedCountry(country);
           localStorage.setItem("selectedCountry", JSON.stringify(country));
         }
-      } catch {}
+      } catch { }
     };
 
     detectCountryFromIP();
@@ -68,7 +68,12 @@ export default function Navbar() {
     return (
       <motion.div
         onClick={() => {
-          navigate(item.path);
+          if (item.path === "/exams" && !user) {
+            navigate("/login");
+          } else {
+            navigate(item.path);
+          }
+
           onClick?.();
         }}
         whileHover={{ scale: 1.05 }}
