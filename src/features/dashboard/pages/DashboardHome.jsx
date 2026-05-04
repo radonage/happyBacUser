@@ -3,38 +3,36 @@ import { motion } from "framer-motion";
 import { useUser } from "../../../context/UserContext";
 import {
   PlayCircle,
-  TrendingUp,
-  Flame,
   BookOpen,
-  GraduationCap,
   Compass
 } from "lucide-react";
 
 /* =========================
-   GLASS CARD PRO (FLUID)
+   GLASS CARD (RESPONSIVE %)
 ========================= */
 function GlassCard({ icon: Icon, title, desc, value }) {
   return (
-    <div className="p-[1px] rounded-2xl bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500">
-      <div className="h-full rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10
-        p-[clamp(12px,1.5vw,18px)]
-        transition-all duration-300 ease-out
-        hover:scale-[1.02] hover:bg-white/5"
-      >
-        <Icon className="text-white/80 mb-3" size={20} />
+    <div className="p-[0.5%] rounded-2xl bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500">
+      <div className="
+        h-full rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10
+        p-[2%]
+        transition-all duration-300
+        hover:scale-[1.02] hover:bg-white/5
+      ">
+        <Icon className="text-white/80 mb-[3%]" size={18} />
 
-        <h3 className="font-semibold text-[clamp(13px,1.1vw,17px)]">
+        <h3 className="font-semibold text-[1rem]">
           {title}
         </h3>
 
         {desc && (
-          <p className="text-gray-400 text-[clamp(11px,0.9vw,13px)] mt-1">
+          <p className="text-gray-400 text-[0.85rem] mt-[1%]">
             {desc}
           </p>
         )}
 
         {value && (
-          <p className="text-[clamp(15px,1.4vw,20px)] font-bold mt-3">
+          <p className="text-[1.1rem] font-bold mt-[3%]">
             {value}
           </p>
         )}
@@ -43,32 +41,38 @@ function GlassCard({ icon: Icon, title, desc, value }) {
   );
 }
 
+/* =========================
+   QUICK CARD
+========================= */
 function QuickCard({ icon: Icon, title }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl
+    <div className="
+      flex items-center gap-[3%] rounded-2xl
       bg-white/5 backdrop-blur-xl border border-white/10
-      p-[clamp(10px,1.2vw,16px)]
+      p-[2%]
       hover:bg-white/10 hover:scale-[1.02]
-      transition-all duration-300"
-    >
-      <Icon className="text-white/70" size={18} />
-      <span className="font-medium text-[clamp(11px,1vw,15px)]">
+      transition-all duration-300
+    ">
+      <Icon className="text-white/70" size={16} />
+      <span className="font-medium text-[0.9rem]">
         {title}
       </span>
     </div>
   );
 }
 
-
+/* =========================
+   LANDING CONTENT
+========================= */
 function LandingContent({ navigate }) {
   return (
-    <div className="max-w-[1200px] mx-auto px-[clamp(12px,3vw,40px)]
-      text-center space-y-[clamp(20px,3vw,50px)]"
-    >
+    <div className="
+      w-[92%] sm:w-[85%] lg:w-[75%] xl:w-[65%]
+      mx-auto text-center
+      space-y-[4%]
+    ">
 
-      <p className="text-gray-400 max-w-[700px] mx-auto
-        text-[clamp(12px,1.1vw,17px)] leading-relaxed"
-      >
+      <p className="text-gray-400 max-w-[90%] mx-auto text-[0.95rem] leading-relaxed">
         La plateforme intelligente qui te guide vers ton bac avec cours, exercices, examens et orientation personnalisée.
       </p>
 
@@ -78,21 +82,22 @@ function LandingContent({ navigate }) {
           onClick={() => navigate("/explorer")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
-          className="px-[clamp(16px,2.5vw,32px)]
-            py-[clamp(10px,1.2vw,14px)]
+          className="
+            px-[4%] py-[1.5%]
             rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600
-            shadow-xl font-semibold"
+            shadow-xl font-semibold text-[0.95rem]
+          "
         >
-          <PlayCircle className="inline mr-2" size={18} />
+          <PlayCircle className="inline mr-2" size={16} />
           Commencer les cours
         </motion.button>
       </div>
 
-      {/* CARDS (FLUID STRIPE STYLE) */}
-      <div className="grid
-        grid-cols-[repeat(auto-fit,minmax(220px,1fr))]
-        gap-[clamp(12px,1.8vw,22px)]"
-      >
+      {/* CARDS */}
+      <div className="
+        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+        gap-[2%]
+      ">
         {[
           {
             title: "Examens",
@@ -119,9 +124,12 @@ function LandingContent({ navigate }) {
           <div
             key={i}
             onClick={() => navigate(card.route)}
-            className="relative rounded-2xl overflow-hidden cursor-pointer
+            className="
+              relative rounded-2xl overflow-hidden cursor-pointer
               aspect-[4/3]
-              group hover:scale-[1.02] transition-all duration-300"
+              group transition-all duration-300
+              hover:scale-[1.02]
+            "
             style={{
               backgroundImage: `url(${card.img})`,
               backgroundSize: "cover",
@@ -130,12 +138,12 @@ function LandingContent({ navigate }) {
           >
             <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition" />
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
-              <card.icon className="mb-2 opacity-90" />
-              <h3 className="text-[clamp(14px,1.3vw,20px)] font-semibold">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-[5%]">
+              <card.icon className="mb-[3%] opacity-90" size={18} />
+              <h3 className="text-[1rem] font-semibold">
                 {card.title}
               </h3>
-              <p className="text-[clamp(11px,0.9vw,13px)] opacity-80">
+              <p className="text-[0.8rem] opacity-80">
                 {card.desc}
               </p>
             </div>
@@ -169,39 +177,52 @@ export default function DashboardHome() {
       </div>
 
       {/* BLOBS */}
-      <div className="absolute -top-32 -left-32 w-[40vw] h-[40vw] bg-emerald-400 blur-[150px] opacity-20" />
-      <div className="absolute -bottom-32 -right-32 w-[40vw] h-[40vw] bg-purple-600 blur-[160px] opacity-20" />
+      <div className="absolute -top-32 -left-32 w-[35%] h-[35%] bg-emerald-400 blur-[150px] opacity-20" />
+      <div className="absolute -bottom-32 -right-32 w-[35%] h-[35%] bg-purple-600 blur-[160px] opacity-20" />
 
       {/* HEADER */}
-      <div className="relative text-center pt-[clamp(40px,6vw,100px)] px-4">
-        <h1 className="font-extrabold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 text-transparent bg-clip-text
-          text-[clamp(32px,4.5vw,70px)]"
-        >
+      <div className="
+        relative text-center
+        pt-[6%]
+        px-[3%]
+      ">
+
+        <h1 className="
+          font-extrabold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300
+          text-transparent bg-clip-text
+          text-[2.5rem] sm:text-[3rem] lg:text-[4rem]
+        ">
           🎓 Happy Bac
         </h1>
 
-        <p className="text-gray-300 mt-2 text-[clamp(12px,1vw,15px)]">
+        <p className="text-gray-300 mt-[1%] text-[0.9rem]">
           Plateforme intelligente de réussite scolaire
         </p>
 
         {/* CTA */}
-        <div className="flex justify-center mt-[clamp(18px,3vw,35px)]">
+        <div className="flex justify-center mt-[3%]">
           <motion.button
             onClick={() => navigate(user ? "/explorer" : "/register")}
             whileHover={{ scale: 1.05 }}
-            className="px-[clamp(16px,2.5vw,30px)]
-              py-[clamp(10px,1.2vw,14px)]
-              rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600 shadow-xl"
+            className="
+              px-[4%] py-[1.5%]
+              rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600
+              shadow-xl text-[0.9rem]
+            "
           >
-            <PlayCircle size={18} className="inline mr-2" />
+            <PlayCircle size={16} className="inline mr-2" />
             {user ? "Continuer" : "Commencer gratuitement"}
           </motion.button>
         </div>
 
         {/* CONTENT */}
-        <div className="mt-[clamp(25px,4vw,70px)]">
+        <div className="
+          mt-[5%]
+          scale-[0.96] lg:scale-100 origin-top
+        ">
           <LandingContent navigate={navigate} />
         </div>
+
       </div>
     </div>
   );
