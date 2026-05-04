@@ -12,7 +12,10 @@
 .animate-zoomSlow {
   animation: zoomSlow 20s ease-in-out infinite;
 }
-
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }

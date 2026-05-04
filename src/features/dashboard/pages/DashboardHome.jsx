@@ -1,38 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useUser } from "../../../context/UserContext";
-import {
-  PlayCircle,
-  BookOpen,
-  Compass
-} from "lucide-react";
+import { PlayCircle, BookOpen, Compass } from "lucide-react";
 
 /* =========================
-   GLASS CARD (RESPONSIVE %)
+   GLASS CARD (IMPROVED)
 ========================= */
 function GlassCard({ icon: Icon, title, desc, value }) {
   return (
-    <div className="p-[0.5%] rounded-2xl bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500">
+    <div className="p-[1.5vh] rounded-2xl bg-gradient-to-r from-emerald-500 via-purple-500 to-pink-500">
       <div className="
         h-full rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10
-        p-[2%]
+        p-[2.5vh]
         transition-all duration-300
-        hover:scale-[1.02] hover:bg-white/5
+        hover:scale-[1.03] hover:bg-white/5
       ">
-        <Icon className="text-white/80 mb-[3%]" size={18} />
+        <Icon className="text-white/80 mb-[1.5vh]" size={20} />
 
-        <h3 className="font-semibold text-[1rem]">
+        <h3 className="font-semibold text-[1.1rem]">
           {title}
         </h3>
 
         {desc && (
-          <p className="text-gray-400 text-[0.85rem] mt-[1%]">
+          <p className="text-gray-400 text-[0.9rem] mt-[1vh]">
             {desc}
           </p>
         )}
 
         {value && (
-          <p className="text-[1.1rem] font-bold mt-[3%]">
+          <p className="text-[1.2rem] font-bold mt-[1.5vh]">
             {value}
           </p>
         )}
@@ -42,19 +38,19 @@ function GlassCard({ icon: Icon, title, desc, value }) {
 }
 
 /* =========================
-   QUICK CARD
+   QUICK CARD (IMPROVED)
 ========================= */
 function QuickCard({ icon: Icon, title }) {
   return (
     <div className="
-      flex items-center gap-[3%] rounded-2xl
-      bg-white/5 backdrop-blur-xl border border-white/10
-      p-[2%]
-      hover:bg-white/10 hover:scale-[1.02]
+      flex items-center gap-[1.5vh]
+      rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10
+      p-[1.8vh]
+      hover:bg-white/10 hover:scale-[1.03]
       transition-all duration-300
     ">
-      <Icon className="text-white/70" size={16} />
-      <span className="font-medium text-[0.9rem]">
+      <Icon className="text-white/70" size={18} />
+      <span className="font-medium text-[1rem]">
         {title}
       </span>
     </div>
@@ -62,17 +58,17 @@ function QuickCard({ icon: Icon, title }) {
 }
 
 /* =========================
-   LANDING CONTENT
+   LANDING CONTENT (BIG FIX)
 ========================= */
 function LandingContent({ navigate }) {
   return (
     <div className="
-      w-[92%] sm:w-[85%] lg:w-[75%] xl:w-[65%]
+      w-[92%] sm:w-[88%] lg:w-[82%] xl:w-[78%]
       mx-auto text-center
-      space-y-[4%]
+      space-y-[3vh]
     ">
 
-      <p className="text-gray-400 max-w-[90%] mx-auto text-[0.95rem] leading-relaxed">
+      <p className="text-gray-400 max-w-[850px] mx-auto text-[1rem] leading-relaxed">
         La plateforme intelligente qui te guide vers ton bac avec cours, exercices, examens et orientation personnalisée.
       </p>
 
@@ -83,12 +79,12 @@ function LandingContent({ navigate }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
           className="
-            px-[4%] py-[1.5%]
+            px-[3vw] py-[1.3vh]
             rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600
-            shadow-xl font-semibold text-[0.95rem]
+            shadow-xl font-semibold text-[1rem]
           "
         >
-          <PlayCircle className="inline mr-2" size={16} />
+          <PlayCircle className="inline mr-2" size={18} />
           Commencer les cours
         </motion.button>
       </div>
@@ -96,7 +92,7 @@ function LandingContent({ navigate }) {
       {/* CARDS */}
       <div className="
         grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-        gap-[2%]
+        gap-[2vh]
       ">
         {[
           {
@@ -128,7 +124,7 @@ function LandingContent({ navigate }) {
               relative rounded-2xl overflow-hidden cursor-pointer
               aspect-[4/3]
               group transition-all duration-300
-              hover:scale-[1.02]
+              hover:scale-[1.03]
             "
             style={{
               backgroundImage: `url(${card.img})`,
@@ -138,12 +134,12 @@ function LandingContent({ navigate }) {
           >
             <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition" />
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-[5%]">
-              <card.icon className="mb-[3%] opacity-90" size={18} />
-              <h3 className="text-[1rem] font-semibold">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-[3vh]">
+              <card.icon className="mb-[1vh]" size={22} />
+              <h3 className="text-[1.1rem] font-semibold">
                 {card.title}
               </h3>
-              <p className="text-[0.8rem] opacity-80">
+              <p className="text-[0.9rem] opacity-80">
                 {card.desc}
               </p>
             </div>
@@ -155,21 +151,21 @@ function LandingContent({ navigate }) {
 }
 
 /* =========================
-   MAIN
+   MAIN DASHBOARD (FIXED)
 ========================= */
 export default function DashboardHome() {
   const navigate = useNavigate();
   const { user } = useUser();
 
   return (
-    <div className="min-h-screen text-white relative overflow-hidden">
+    <div className="h-screen w-screen overflow-hidden text-white relative">
 
       {/* BACKGROUND */}
       <div className="absolute inset-0">
         <motion.img
           src="/monimagefordash.avif"
           initial={{ scale: 1 }}
-          animate={{ scale: 1.1 }}
+          animate={{ scale: 1.08 }}
           transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
           className="w-full h-full object-cover opacity-40"
         />
@@ -177,49 +173,47 @@ export default function DashboardHome() {
       </div>
 
       {/* BLOBS */}
-      <div className="absolute -top-32 -left-32 w-[35%] h-[35%] bg-emerald-400 blur-[150px] opacity-20" />
-      <div className="absolute -bottom-32 -right-32 w-[35%] h-[35%] bg-purple-600 blur-[160px] opacity-20" />
+      <div className="absolute -top-32 -left-32 w-[40vw] h-[40vw] bg-emerald-400 blur-[160px] opacity-20" />
+      <div className="absolute -bottom-32 -right-32 w-[40vw] h-[40vw] bg-purple-600 blur-[180px] opacity-20" />
 
       {/* HEADER */}
       <div className="
         relative text-center
-        pt-[6%]
-        px-[3%]
+        pt-[4vh]
+        px-[4vw]
+        flex flex-col items-center
       ">
 
         <h1 className="
           font-extrabold bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300
           text-transparent bg-clip-text
-          text-[2.5rem] sm:text-[3rem] lg:text-[4rem]
+          text-[clamp(2.5rem,4vw,4rem)]
         ">
           🎓 Happy Bac
         </h1>
 
-        <p className="text-gray-300 mt-[1%] text-[0.9rem]">
+        <p className="text-gray-300 mt-[1vh] text-[1rem]">
           Plateforme intelligente de réussite scolaire
         </p>
 
         {/* CTA */}
-        <div className="flex justify-center mt-[3%]">
+        <div className="flex justify-center mt-[3vh]">
           <motion.button
             onClick={() => navigate(user ? "/explorer" : "/register")}
             whileHover={{ scale: 1.05 }}
             className="
-              px-[4%] py-[1.5%]
+              px-[3vw] py-[1.3vh]
               rounded-xl bg-gradient-to-r from-emerald-500 to-purple-600
-              shadow-xl text-[0.9rem]
+              shadow-xl text-[1rem]
             "
           >
-            <PlayCircle size={16} className="inline mr-2" />
+            <PlayCircle size={18} className="inline mr-2" />
             {user ? "Continuer" : "Commencer gratuitement"}
           </motion.button>
         </div>
 
         {/* CONTENT */}
-        <div className="
-          mt-[5%]
-          scale-[0.96] lg:scale-100 origin-top
-        ">
+        <div className="mt-[4vh] w-[90%] max-w-[1200px]">
           <LandingContent navigate={navigate} />
         </div>
 
